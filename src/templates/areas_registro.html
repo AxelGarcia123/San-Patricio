@@ -1,0 +1,107 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Registrar área{% endblock %}
+
+{% block contenido %}
+<!-- REGISTRO DE AREAS -->
+
+<div class="forma mt-3">
+    <!-- <h2>Registro de personas</h2> -->
+
+    <h4 class="mx-auto mb-4">Registrar área</h4>
+
+    <form class="needs-validation"  action="" method="POST">
+        <div class="row ">
+
+            <div class="col-md-8 mb-3">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="" value="" maxlength="100" required autofocus>
+        
+                <div class="invalid-feedback">
+                    Ingrese una opción válida.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="tipo">Tipo de área</label>
+                <select class="custom-select d-block w-100" id="tipo" name="tipo" required>
+                    <option value="">Elige...</option>
+                    <option value="Duela">Duela</option>
+                    <option value="Pasto natural">Pasto natural</option>
+                    <option value="Arena">Arena</option>
+                    <option value="Pasto sintetico">Pasto sintético</option>
+                    <option value="Cemento">Cemento</option>
+                    <option value="Caucho">Caucho</option>
+                    <option value="Grava">Grava</option>
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="ancho">Ancho</label>
+                <input type="number" class="form-control" id="ancho" name="ancho" placeholder="" value="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un número válido.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="largo">Largo</label>
+                <input type="number" class="form-control" id="largo" name="largo" placeholder="" value="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un número válido.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="umedida">Unidad de medida</label>
+                <select class="custom-select d-block w-100" id="umedida" name="umedida" required>
+                    <option value="">Elige...</option>
+                    <option value="Centimetros">Centímetros (cm)</option>
+                    <option value="Metros">Metros (m)</option>
+                    <option value="Pies">Pies (ft)</option>
+                    <option value="Yardas">yardas (yd)</option>
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 mb-3">
+                <label for="detalles">Detalles</label>
+                <!-- <input type="text" class="form-control" id="descripcion" placeholder="" value="" required> -->
+                <textarea class="form-control" id="detalles" name="detalles" rows="2" maxlength="255"></textarea>
+        
+                <div class="invalid-feedback">
+                    Ingrese una descripcion válida.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="mt-3 mb-2">
+                <button type="submit" class="btn btn-success btn-lg mr-2" id="_btAceptar">Aceptar</button>
+                <!-- <button type="button" class="btn btn-secondary btn-lg" id="btnTest">Cancelar</button> -->
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/scripts/areas_registro.js') }}"></script>
+
+{% endblock %}

@@ -7,13 +7,13 @@
     padding: 0;
 }
 
-li, a {
+.ltem, .ltem > a {
     text-decoration: none;
     list-style: none;
     color: #000;
 }
 
-header {
+.cabecera {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,7 +22,7 @@ header {
     padding: 0;
 }
 
-.logo, h1 {
+.logo, .init-content > h1 {
     padding: 5px;
     cursor: pointer;
 }
@@ -67,7 +67,7 @@ h1 {
     height: 50px;
 }
 
-button {
+.boton {
     background: none;
     border: none;
     border-radius: 50%;

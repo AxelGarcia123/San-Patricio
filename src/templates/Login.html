@@ -17,17 +17,27 @@
             </div>
         </div>
         <div class="content-right">
-            <h2 id="Login">Login</h2>
+            <h2 id="Login">Iniciar sesión</h2>
             <div class="login">
-                <p>Username</p>
-                <input type="text" placeholder="Enter your username" id="username">
-                <p>Password</p>
-                <input type="password" placeholder="Enter your password"> <br>
-                <!-- <a href="#" id="hyperlink">Forgot your password?</a> <br> -->
-                <a href="#" id="hyperlink">Forgot your password?</a> <br>
-                <button id="buttom">  <a href="{{ url_for('cargar_menu') }}">Login</a> </button>
+
+                <form action="" method="POST">
+                    <p>Usuario</p>
+                    <input type="text" placeholder="Ingrese su nombre de usuario" id="username" name="username" required autofocus>
+                    <p>Contraseña</p>
+                    <input type="password" placeholder="Ingrese su contraseña" id="password" name="password" required> <br>
+                    <!-- <a href="#" id="hyperlink">Forgot your password?</a> <br> -->
+                    <a href="#" id="hyperlink">¿Olvidó su contraseña?</a> <br>
+                    <button id="button"> Iniciar sesión </button>
+
+                </form>
+
+
+                
             </div>
         </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/login/login.js') }}"></script> -->
 </body>
 </html>
