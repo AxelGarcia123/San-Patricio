@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block titulo %}{% endblock %} </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+
+    <style>
+        .forma {
+            margin: auto;
+            width: 90%;
+        }
+    </style>
+    
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <header class="contenedor cabecera">
+        <div class="init-content">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo de la empresa" class="logo">
+            <h1>San Patricio</h1>
+        </div>
+        <nav class="nav-content">
+            <ul>
+                <li class="ltem"><a href="#">Empleados</a></li>
+                <li class="ltem"><a href="#">Alumnos</a></li>
+                <li class="ltem"><a href="#">Actividades</a></li>
+                <li class="ltem"><a href="#">Grupos</a></li>
+                <li class="ltem"><a href="#">Áreas</a></li>
+                <li class="ltem"><a href="#">Materiales</a></li>
+                <li class="ltem"><a href="#">Horarios</a></li>
+                <li class="ltem"><a href="#">Pagos</a></li>
+                <li class="ltem"><a href="#">Reportes</a></li>
+            </ul>
+        </nav>
+        <div class="d-inline profile">
+            <button class="d-inline boton button-notification">
+                <img src="{{ url_for('static', filename='images/notification.png') }}" alt="notificaciones" class="notification">
+            </button>
+            <button class="d-inline boton button-profile">
+                <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="foto de perfil" class="photo-profile">
+            </button>
+        </div>
+    </header>
+
+    
+    {% block contenido %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block titulo %}{% endblock %} </title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu_responsive.css') }}">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+  
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+      </style>
+
+      {% block css %}{% endblock %}
+</head>
+<body>
+    <!-- cabecera navbar navbar-expand-md navbar-dark fixed-top -->
+    <nav class="cabecera navbar navbar-expand-md navbar-dark fixed-top ">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo de la empresa" class="logo">
+        <a class="navbar-brand ml-3 text-dark" href="{{ url_for('cargar_menu_responsive') }}">San Patricio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse ml-5" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link text-dark" href="#">Empleados <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Alumnos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Actividades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Grupos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Áreas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Materiales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Horarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Pagos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Reportes</a>
+                </li>
+                
+            </ul>
+
+            <!-- <form class="form-inline mt-2 mt-md-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form> -->
+
+            <div class="d-inline mt-2 mt-md-0 profile">
+                <button class="d-inline boton button-notification">   
+                    <img src="{{ url_for('static', filename='images/notification.png') }}" alt="notificaciones" class="notificacion">
+                </button>
+                <button class="d-inline boton button-profile">            
+                    <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="foto_perfil" class="foto-perfil">
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script src="{{ url_for('static', filename='/js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/bootstrap/bootstrap.bundle.js') }}"></script>
+
+    {% block contenido %}{% endblock %}
+
+</body>
+</html>
