@@ -31,7 +31,7 @@
     <!-- cabecera navbar navbar-expand-md navbar-dark fixed-top -->
     <nav class="cabecera navbar navbar-expand-md navbar-dark fixed-top ">
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo de la empresa" class="logo">
-        <a class="navbar-brand ml-3 text-dark" href="#">San Patricio</a>
+        <a class="navbar-brand ml-3 text-dark" href="{{ url_for('cargar_menu_responsive') }}">San Patricio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

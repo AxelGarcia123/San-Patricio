@@ -1,22 +1,22 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 # from flaskext.mysql import MySQL
 import mysql.connector
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="3_99SA.17*Pc#2",
-  database = "sanpatricio",
-  auth_plugin='mysql_native_password'
+    host="localhost",
+    user="root",
+    passwd="3_99SA.17*Pc#2",
+    database = "sanpatricio",
+    auth_plugin='mysql_native_password'
 )
 
 cur = mydb.cursor()
 
 @app.route('/', methods=['GET', 'POST'])
 def cargar_login():
-    if request.method == "POST":
-        detalles = request.form
+    # if request.method == "POST":
+    #     detalles = request.form
         # print(detalles)
         # _username = detalles['username']
         # _password = detalles['password']
@@ -83,6 +83,84 @@ def cargar_areas_registro():
         pass
 
     return render_template('areas_registro.html')
+
+@app.route('/registro-actividades', methods=['GET', 'POST'])
+def cargar_actividades_registro():
+    if request.method == "POST":
+        detalles = request.form
+        _nombre = detalles['nombre']
+        _tipo = detalles['tipo']
+        _descripcion = detalles['descripcion']
+
+        query = "insert into actividad values(%s, %s, %s, %s)"
+        values = (None, _nombre, _tipo, _descripcion)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+
+        pass
+
+    return render_template('actividades_registro.html')
+
+# @app.route('/grupos/')
+# def cargar_grupos():
+#     return render_template('grupos.html')
+
+@app.route('/registro-grupos', methods=['GET', 'POST'])
+def cargar_grupos_registro():
+    if request.method == "GET":
+        query = "select cve_act, nom_act from actividad"
+        
+        cur.execute(query)
+        actividades = cur.fetchall()
+
+        query = "select cve_are, nombre_are from area"
+        
+        cur.execute(query)
+        areas = cur.fetchall()
+
+        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per"
+        
+        cur.execute(query)
+        empleados = cur.fetchall()
+
+        return render_template('grupos_registro.html', actividades = actividades, areas = areas, empleados = empleados)
+
+    if request.method == "POST":
+        detalles = request.form
+        _horaent = detalles['horaent']
+        _horasali = detalles['horasali']
+        _fechaini = detalles['fechaini']
+        _fechafin = detalles['fechafin']
+        _minalumnos = detalles['minalumnos']
+        _maxalumnos = detalles['maxalumnos']
+        _actividad = detalles['actividad']
+        _area = detalles['area']
+        _empleado = detalles['empleado']
+
+        query = "insert into grupo values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (None, _horaent, _horasali, _fechaini, _fechafin, _maxalumnos, _minalumnos, _actividad, _area, _empleado)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+
+        pass
+
+    return render_template('grupos_registro.html')
+
+@app.route('/registro-personas', methods=['GET', 'POST'])
+def cargar_personas_registro():
+    if request.method == "POST":
+        return redirect(url_for('cargar_alumnos_registro'))
+    return render_template('personas_registro.html')
+
+@app.route('/registro-alumnos')
+def cargar_alumnos_registro():
+    return render_template('alumnos_registro.html')
 
 # @app.route('/test', methods=['GET', 'POST'])
 # def test():
