@@ -41,12 +41,10 @@
 
             <div class="col-md-4 mb-3">
                 <label for="curp">CURP</label>
-                <select class="custom-select d-block w-100" id="curp" name="curp" required>
-                    <option value="">Elige...</option>
-                </select>
+                <input type="text" class="form-control" id="curp" name="curp" placeholder="" value="{{ curp }}" disabled>
         
                 <div class="invalid-feedback">
-                    Elija una opción.
+                    Ingrese una CURP válida.
                 </div>
             </div>
 

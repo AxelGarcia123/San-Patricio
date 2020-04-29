@@ -111,18 +111,15 @@ def cargar_actividades_registro():
 @app.route('/registro-grupos', methods=['GET', 'POST'])
 def cargar_grupos_registro():
     if request.method == "GET":
-        query = "select cve_act, nom_act from actividad"
-        
+        query = "select cve_act, nom_act from actividad"     
         cur.execute(query)
         actividades = cur.fetchall()
 
         query = "select cve_are, nombre_are from area"
-        
         cur.execute(query)
         areas = cur.fetchall()
 
-        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per"
-        
+        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per"  
         cur.execute(query)
         empleados = cur.fetchall()
 
@@ -147,20 +144,62 @@ def cargar_grupos_registro():
         mydb.commit()
 
         print("INSERCION EXITOSA")
-
         pass
 
     return render_template('grupos_registro.html')
 
+### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
 @app.route('/registro-personas', methods=['GET', 'POST'])
-def cargar_personas_registro():
+def cargar_personas_registro():      
     if request.method == "POST":
-        return redirect(url_for('cargar_alumnos_registro'))
-    return render_template('personas_registro.html')
+        detalles = request.form
+        _curp = detalles['curp']
+        _nombre = detalles['nombre']
+        _ap = detalles['ap']
+        _am = detalles['am']
+        _tel = detalles['tel']
+        _fechanac = detalles['fechanac']
+        _genero = detalles['genero']
+        _calle = detalles['calle']
+        _num = detalles['num']
+        _orient = detalles['orient']
+        _entrecalles = detalles['entrecalles']
+        _col = detalles['col']
 
-@app.route('/registro-alumnos')
-def cargar_alumnos_registro():
-    return render_template('alumnos_registro.html')
+        query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
+
+        cur.execute(query, values)
+        # mydb.commit()
+
+        return redirect(url_for('cargar_alumnos_registro', curp = _curp))
+        # return render_template('alumnos_registro.html', curp = _curp) ## NO funciona
+
+    query = "select * from colonia"
+    cur.execute(query)
+    colonias = cur.fetchall()
+
+    return render_template('personas_registro.html', colonias = colonias)
+
+### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
+@app.route('/registro-alumnos/<curp>', methods=['GET', 'POST'])
+def cargar_alumnos_registro(curp):
+    if request.method == "POST":
+        detalles = request.form
+        _estatura = detalles['estatura']
+        _peso = detalles['peso']
+
+        query = "insert into alumno values (%s, %s, %s, %s)"
+        values = (None, _estatura, _peso, curp)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+
+        pass
+
+    return render_template('alumnos_registro.html', curp = curp)
 
 # @app.route('/test', methods=['GET', 'POST'])
 # def test():
