@@ -201,6 +201,53 @@ def cargar_alumnos_registro(curp):
 
     return render_template('alumnos_registro.html', curp = curp)
 
+@app.route('/generar-folios', methods=['GET', 'POST'])
+def cargar_folios_generar():
+    if request.method == "POST":
+        detalles = request.form
+        _fecha = detalles['fecha']
+        _hora = detalles['hora']
+        _costo = detalles['costo']
+        _alumno = detalles['alumno']
+        _actividad = detalles['actividad']
+
+        _fechaHora = _fecha + " " + _hora
+
+        query = "insert into folio values (%s, %s, %s, %s, %s)"
+        values = (None, _fechaHora, _costo, _alumno, _actividad)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    return render_template('folios_generar.html')
+
+@app.route('/registro-inscripciones', methods=['GET', 'POST'])
+def cargar_inscripciones_registro():
+    if request.method == "POST":
+        detalles = request.form
+        _folio = detalles['folio']
+        _fecha = detalles['fecha']
+        _hora = detalles['hora']
+        _importe = detalles['importe']
+        _total = detalles['total']
+        _grupo = detalles['grupo']
+
+        _fechaHora = _fecha + " " + _hora
+
+        query = "insert into registroinscripcion values (%s, %s, %s, %s, %s)"
+        values = (_folio, _fechaHora, _importe, _total, _grupo)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    return render_template('inscripciones_registro.html')
+
 # @app.route('/test', methods=['GET', 'POST'])
 # def test():
 #     if request.method == "POST":

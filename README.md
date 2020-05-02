@@ -10,6 +10,7 @@ Servidor web creado en Flask para controlar y gestionar datos de un colegio de a
 
 * [Python](https://www.python.org/downloads/release/python-382/) - Necesario para ejecutar Flask
 * [Git](https://git-scm.com/downloads) - Para gestionar repositorios
+* [MySQL - Python Connector](https://dev.mysql.com/downloads/connector/python/) - Para conectar Python con la base de datos MySQL
 
 ### Instrucciones para ejecutar el servidor
 
@@ -73,6 +74,9 @@ o
 * Hacer la ventana de Login responsiva.
 * Hacer funcional el menu_responsive. No tiene referencias hacia ninguna página.
 * Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css. Esto debido a que no sé cómo importar desde web a Flask con url_for, y ni siquiera sé si lo permite el framework.
+* Comprobar la ejecución correcta de los scripts de registro de personas, alumnos, folios e inscripciones.
+* Mejorar las ventanas de folios e inscripciones.
+* Búsquedas dinámicas de alumnos en ventana de folio.
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.
