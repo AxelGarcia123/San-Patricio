@@ -71,12 +71,14 @@ o
 ```
 
 ### TODO (también conocido como Lista de quehaceres): 
+* Evitar el ingreso a URL's directas sin antes haber iniciado sesión.
 * Hacer la ventana de Login responsiva.
 * Hacer funcional el menu_responsive. No tiene referencias hacia ninguna página.
 * Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css. Esto debido a que no sé cómo importar desde web a Flask con url_for, y ni siquiera sé si lo permite el framework.
 * Comprobar la ejecución correcta de los scripts de registro de personas, alumnos, folios e inscripciones.
 * Mejorar las ventanas de folios e inscripciones.
 * Búsquedas dinámicas de alumnos en ventana de folio.
+* Cambiar el registro de alumnos y empleados. Crear un bloque en personas_registro.html para luego extender y agregar el contenido necesario. 
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.

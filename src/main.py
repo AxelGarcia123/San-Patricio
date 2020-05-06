@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
-# from flaskext.mysql import MySQL
 import mysql.connector
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="3_99SA.17*Pc#2",
-    database = "sanpatricio",
-    auth_plugin='mysql_native_password'
+    host="localhost", ## Escribir aquí tu host (localhost por defecto)
+    user="root", ## Escribir aquí tu usuario
+    passwd="3_99SA.17*Pc#2", ## Escribir aquí tu contraseña
+    database = "sanpatricio", ## Escribir aquí el nombre de la base de datos
+    auth_plugin='mysql_native_password' ## Dejar esta propiedad así
 )
 
 cur = mydb.cursor()
@@ -51,8 +50,6 @@ def cargar_areas_registro():
         _largo = detalles['largo']
         _umedida = detalles['umedida']
         _detalles = detalles['detalles']
-
-        # print(detalles)
 
         query = "insert into area values(%s, %s, %s, %s, %s, %s, %s)"
         values = (None, _nombre, _tipo, _ancho, _largo, _umedida, _detalles)
@@ -99,7 +96,6 @@ def cargar_actividades_registro():
         mydb.commit()
 
         print("INSERCION EXITOSA")
-
         pass
 
     return render_template('actividades_registro.html')
@@ -196,7 +192,6 @@ def cargar_alumnos_registro(curp):
         mydb.commit()
 
         print("INSERCION EXITOSA")
-
         pass
 
     return render_template('alumnos_registro.html', curp = curp)

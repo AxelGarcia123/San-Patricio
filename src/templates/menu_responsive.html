@@ -27,9 +27,9 @@
 
       {% block css %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- cabecera navbar navbar-expand-md navbar-dark fixed-top -->
-    <nav class="cabecera navbar navbar-expand-md navbar-dark fixed-top ">
+    <nav class="cabecera navbar navbar-expand-md navbar-dark fixed-top">
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo de la empresa" class="logo">
         <a class="navbar-brand ml-3 text-dark" href="{{ url_for('cargar_menu_responsive') }}">San Patricio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,15 @@
     <script src="{{ url_for('static', filename='/js/bootstrap/bootstrap.bundle.js') }}"></script>
 
     {% block contenido %}{% endblock %}
+
+    <footer class="mb-3 pt-3 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2020-2020 San Patricio</p>
+        <!-- <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul> -->
+    </footer>
 
 </body>
 </html>
