@@ -1,5 +1,5 @@
 {% extends "menu_responsive.html" %}
-{% block titulo %}Registrar persona{% endblock %}
+{# {% block titulo %}{% endblock %} #}
 
 {% block css %}
 
@@ -19,9 +19,9 @@
 {% block contenido %}
 <!-- REGISTRO DE PERSONAS -->
 
-<div class="forma py-3 px-5 mt-3 border border-dark">
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
 
-    <h3 class="mx-auto mb-4 pl-3">Registrar persona</h3>
+    <h3 class="mx-auto mb-4 pl-3">Registrar {% block persona %}{% endblock %}</h3>
 
     <h5 class="mx-auto mb-4">1. Información personal</h5>
 
@@ -189,12 +189,22 @@
 
         </div>
 
-        <h5 class="mx-auto mb-4">3. Datos de contratación</h5>
+        {% block extra %}{% endblock %}
+
+        <!-- <h5 class="mx-auto mb-4">3. Datos de contratación</h5> -->
 
         <!-- TODO -->
 
-        <div class="row justify-content-end">
+        <!-- <div class="row justify-content-end">
             <div class="mt-3 mb-2">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div> -->
+
+        <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">
+            <div class="mt-auto bd-highlight">
                 <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
                 <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
             </div>

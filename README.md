@@ -79,8 +79,8 @@ o
 * Mejorar las ventanas de folios e inscripciones.
 * Búsquedas dinámicas de alumnos en ventana de folio.
 * Cambiar el registro de alumnos y empleados. Crear un bloque en personas_registro.html para luego extender y agregar el contenido necesario. 
+* Mejorar la responsividad de los botones de Guardar y Cancelar en los formularios.
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.
 * Se elimnaron los archivos JS de JQuery (3.5.0) que no funcionaban correctamente con la última versión de Bootstrap (4.4.x). Se hizo un downgrade de la versión 3.5.0 de JQuery a la versión 3.4.1.
-

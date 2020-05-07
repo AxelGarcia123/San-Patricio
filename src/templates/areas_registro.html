@@ -1,19 +1,34 @@
 {% extends "menu_responsive.html" %}
 {% block titulo %}Registrar área{% endblock %}
 
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+{% endblock %}
+
 {% block contenido %}
 <!-- REGISTRO DE AREAS -->
 
-<div class="forma mt-3">
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
 
-    <h4 class="mx-auto mb-4">Registrar área</h4>
+    <h3 class="mx-auto mb-4">Registrar área</h3>
 
     <form class="needs-validation"  action="" method="POST">
         <div class="row ">
 
             <div class="col-md-8 mb-3">
-                <label for="nombre">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="" value="" maxlength="100" required autofocus>
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="" maxlength="100" required autofocus>
         
                 <div class="invalid-feedback">
                     Ingrese un nombre válido.
@@ -21,9 +36,9 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <label for="tipo">Tipo de área</label>
+                <!-- <label for="tipo">Tipo de área</label> -->
                 <select class="custom-select d-block w-100" id="tipo" name="tipo" required>
-                    <option value="">Elige...</option>
+                    <option value="">Tipo de área...</option>
                     <option value="Duela">Duela</option>
                     <option value="Pasto natural">Pasto natural</option>
                     <option value="Arena">Arena</option>
@@ -43,8 +58,8 @@
         <div class="row">
 
             <div class="col-md-4 mb-3">
-                <label for="ancho">Ancho</label>
-                <input type="number" class="form-control" id="ancho" name="ancho" placeholder="" value="" required>
+                <!-- <label for="ancho">Ancho</label> -->
+                <input type="number" class="form-control" id="ancho" name="ancho" placeholder="Ancho" value="" required>
         
                 <div class="invalid-feedback">
                     Ingrese un número válido.
@@ -52,8 +67,8 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <label for="largo">Largo</label>
-                <input type="number" class="form-control" id="largo" name="largo" placeholder="" value="" required>
+                <!-- <label for="largo">Largo</label> -->
+                <input type="number" class="form-control" id="largo" name="largo" placeholder="Largo" value="" required>
         
                 <div class="invalid-feedback">
                     Ingrese un número válido.
@@ -61,9 +76,9 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <label for="umedida">Unidad de medida</label>
+                <!-- <label for="umedida">Unidad de medida</label> -->
                 <select class="custom-select d-block w-100" id="umedida" name="umedida" required>
-                    <option value="">Elige...</option>
+                    <option value="">Unidad de medida...</option>
                     <option value="Centimetros">Centímetros (cm)</option>
                     <option value="Metros">Metros (m)</option>
                     <option value="Pies">Pies (ft)</option>
@@ -80,21 +95,21 @@
         <div class="row">
 
             <div class="col-md-12 mb-3">
-                <label for="detalles">Detalles</label>
-                <!-- <input type="text" class="form-control" id="descripcion" placeholder="" value="" required> -->
-                <textarea class="form-control" id="detalles" name="detalles" rows="2" maxlength="255"></textarea>
+                <!-- <label for="detalles">Detalles</label> -->
+                <textarea class="form-control" id="detalles" name="detalles" rows="2" maxlength="255" placeholder="Detalles"></textarea>
         
                 <div class="invalid-feedback">
-                    Ingrese una descripcion válida.
+                    Ingrese una descripción válida.
                 </div>
             </div>
 
         </div>
 
-        <div class="row justify-content-center">
-            <div class="mt-3 mb-2">
-                <button type="submit" class="btn btn-success btn-lg mr-2" id="_btAceptar">Aceptar</button>
-                <!-- <button type="button" class="btn btn-secondary btn-lg" id="btnTest">Cancelar</button> -->
+        <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 190px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
             </div>
         </div>
 

@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
     host="localhost", ## Escribir aquí tu host (localhost por defecto)
-    user="root", ## Escribir aquí tu usuario
-    passwd="3_99SA.17*Pc#2", ## Escribir aquí tu contraseña
-    database = "sanpatricio", ## Escribir aquí el nombre de la base de datos
-    auth_plugin='mysql_native_password' ## Dejar esta propiedad así
+    user="root", # Escribir aquí tu usuario
+    passwd="3_99SA.17*Pc#2", # Escribir aquí tu contraseña
+    database = "sanpatricio", # Escribir aquí el nombre de la base de datos
+    auth_plugin='mysql_native_password' # Dejar esta propiedad así
 )
 
 cur = mydb.cursor()
@@ -144,57 +146,61 @@ def cargar_grupos_registro():
 
     return render_template('grupos_registro.html')
 
+### TODO: CAMBIAR ESTOS DATOS A registro_alumnos Y registro_empleados
+# @app.route('/registro-personas', methods=['GET', 'POST'])
+# def cargar_personas_registro():      
+#     if request.method == "POST":
+#         detalles = request.form
+#         _curp = detalles['curp']
+#         _nombre = detalles['nombre']
+#         _ap = detalles['ap']
+#         _am = detalles['am']
+#         _tel = detalles['tel']
+#         _fechanac = detalles['fechanac']
+#         _genero = detalles['genero']
+#         _calle = detalles['calle']
+#         _num = detalles['num']
+#         _orient = detalles['orient']
+#         _entrecalles = detalles['entrecalles']
+#         _col = detalles['col']
+
+#         query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+#         values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
+
+#         cur.execute(query, values)
+#         # mydb.commit()
+
+#         return redirect(url_for('cargar_alumnos_registro', curp = _curp))
+#         # return render_template('alumnos_registro.html', curp = _curp) ## NO funciona
+
+#     query = "select * from colonia"
+#     cur.execute(query)
+#     colonias = cur.fetchall()
+
+#     return render_template('personas_registro.html', colonias = colonias)
+
+@app.route('/registro-empleados')
+def cargar_empleados_registro():
+    return render_template('empleados_registro.html')
+
 ### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
-@app.route('/registro-personas', methods=['GET', 'POST'])
-def cargar_personas_registro():      
-    if request.method == "POST":
-        detalles = request.form
-        _curp = detalles['curp']
-        _nombre = detalles['nombre']
-        _ap = detalles['ap']
-        _am = detalles['am']
-        _tel = detalles['tel']
-        _fechanac = detalles['fechanac']
-        _genero = detalles['genero']
-        _calle = detalles['calle']
-        _num = detalles['num']
-        _orient = detalles['orient']
-        _entrecalles = detalles['entrecalles']
-        _col = detalles['col']
+@app.route('/registro-alumnos', methods=['GET', 'POST'])
+def cargar_alumnos_registro():
+    # if request.method == "POST":
+    #     detalles = request.form
+    #     _estatura = detalles['estatura']
+    #     _peso = detalles['peso']
 
-        query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
+    #     query = "insert into alumno values (%s, %s, %s, %s)"
+    #     values = (None, _estatura, _peso, curp)
 
-        cur.execute(query, values)
-        # mydb.commit()
+    #     cur.execute(query, values)
+    #     mydb.commit()
 
-        return redirect(url_for('cargar_alumnos_registro', curp = _curp))
-        # return render_template('alumnos_registro.html', curp = _curp) ## NO funciona
+    #     print("INSERCION EXITOSA")
+    #     pass
 
-    query = "select * from colonia"
-    cur.execute(query)
-    colonias = cur.fetchall()
-
-    return render_template('personas_registro.html', colonias = colonias)
-
-### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
-@app.route('/registro-alumnos/<curp>', methods=['GET', 'POST'])
-def cargar_alumnos_registro(curp):
-    if request.method == "POST":
-        detalles = request.form
-        _estatura = detalles['estatura']
-        _peso = detalles['peso']
-
-        query = "insert into alumno values (%s, %s, %s, %s)"
-        values = (None, _estatura, _peso, curp)
-
-        cur.execute(query, values)
-        mydb.commit()
-
-        print("INSERCION EXITOSA")
-        pass
-
-    return render_template('alumnos_registro.html', curp = curp)
+    return render_template('alumnos_registro.html')
 
 @app.route('/generar-folios', methods=['GET', 'POST'])
 def cargar_folios_generar():
@@ -242,6 +248,15 @@ def cargar_inscripciones_registro():
         pass
 
     return render_template('inscripciones_registro.html')
+
+@app.route('/registro-materiales')
+def cargar_materiales_registro():
+    # TODO: programar formulario y mysql
+    return render_template('materiales_registro.html')
+
+@app.route('/nominas')
+def cargar_nominas():
+    return render_template('nominas.html')
 
 # @app.route('/test', methods=['GET', 'POST'])
 # def test():
