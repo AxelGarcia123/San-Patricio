@@ -23,7 +23,7 @@
 
     <h3 class="mx-auto mb-4">Registrar material</h3>
 
-    <form class="needs-validation"  action="" method="POST">
+    <form class="needs-validation" action="" method="POST">
         <div class="row">
 
             <div class="col-md-3 mb-3">
@@ -57,13 +57,9 @@
                 <!-- <label for="tipo">Tipo de área</label> -->
                 <select class="custom-select d-block w-100" id="actividad" name="actividad" required>
                     <option value="">Actividad...</option>
-                    <!-- <option value="Duela">Duela</option>
-                    <option value="Pasto natural">Pasto natural</option>
-                    <option value="Arena">Arena</option>
-                    <option value="Pasto sintetico">Pasto sintético</option>
-                    <option value="Cemento">Cemento</option>
-                    <option value="Caucho">Caucho</option>
-                    <option value="Grava">Grava</option> -->
+                    {% for i in actividades %}
+                        <option value="{{ i[0] }}">{{ i[1] }}</option>
+                    {% endfor %}
                 </select>
         
                 <div class="invalid-feedback">

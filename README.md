@@ -47,6 +47,17 @@ Indica desde dónde iniciará el servidor web:
 PS > $env:FLASK_APP="main.py"
 ```
 
+Antes de ejecutar el servidor, abre el archivo **main.py** con tu editor de textos favorito y cambia las propiedades de la conexión a MySQL con los datos de tu usuario, contraseña y el nombre que inidicaste a tu base de datos de San Patricio. En **main.py**:
+```
+mydb = mysql.connector.connect(
+    host="tu_host", # Escribir aqui tu host (localhost por defecto)
+    user="tu_usuario", # Escribir aqui tu usuario
+    passwd="tu_contrasena", # Escribir aqui tu contraseña
+    database = "el_nombre_de_la_base_de_datos", # Escribir aqui el nombre de la base de datos
+    auth_plugin='mysql_native_password' # Dejar esta propiedad asi
+)
+```
+
 Ejecuta el servidor:
 
 * ##### Sólo máquina local
@@ -84,3 +95,5 @@ o
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.
 * Se elimnaron los archivos JS de JQuery (3.5.0) que no funcionaban correctamente con la última versión de Bootstrap (4.4.x). Se hizo un downgrade de la versión 3.5.0 de JQuery a la versión 3.4.1.
+* Se cambió la librería _mysql-connector_ a _mysql-connector-python_, ya que la primera es una versión obsoleta.
+* Se mejoraron las URL's de las páginas para facilitar su acceso.

@@ -5,11 +5,11 @@ import mysql.connector
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
-    host="localhost", ## Escribir aquí tu host (localhost por defecto)
-    user="root", # Escribir aquí tu usuario
-    passwd="3_99SA.17*Pc#2", # Escribir aquí tu contraseña
-    database = "sanpatricio", # Escribir aquí el nombre de la base de datos
-    auth_plugin='mysql_native_password' # Dejar esta propiedad así
+    host="localhost", ## Escribir aqui tu host (localhost por defecto)
+    user="root", # Escribir aqui tu usuario
+    passwd="3_99SA.17*Pc#2", # Escribir aqui tu contraseña
+    database = "sanpatricio", # Escribir aqui el nombre de la base de datos
+    auth_plugin='mysql_native_password' # Dejar esta propiedad asi
 )
 
 cur = mydb.cursor()
@@ -34,15 +34,19 @@ def cargar_login():
 def cargar_menu():
     return render_template('menu.html')
 
-@app.route('/menu-responsive/')
+# /menu-responsive/
+@app.route('/menu-responsive')
 def cargar_menu_responsive():
     return render_template('menu_responsive.html')
+
+# --------------------- AREAS --------------------- #
 
 @app.route('/areas/')
 def cargar_areas():
     return render_template('areas.html')
 
-@app.route('/registro-areas', methods=['GET', 'POST'])
+# /registro-areas
+@app.route('/areas/registrar', methods=['GET', 'POST'])
 def cargar_areas_registro():
     if request.method == "POST":
         detalles = request.form
@@ -83,7 +87,10 @@ def cargar_areas_registro():
 
     return render_template('areas_registro.html')
 
-@app.route('/registro-actividades', methods=['GET', 'POST'])
+# --------------------- ACTIVIDADES --------------------- #
+
+# /registro-actividades
+@app.route('/actividades/registrar', methods=['GET', 'POST'])
 def cargar_actividades_registro():
     if request.method == "POST":
         detalles = request.form
@@ -102,11 +109,14 @@ def cargar_actividades_registro():
 
     return render_template('actividades_registro.html')
 
+# --------------------- GRUPOS --------------------- #
+
 # @app.route('/grupos/')
 # def cargar_grupos():
 #     return render_template('grupos.html')
 
-@app.route('/registro-grupos', methods=['GET', 'POST'])
+#/registro-grupos
+@app.route('/grupos/registrar', methods=['GET', 'POST'])
 def cargar_grupos_registro():
     if request.method == "GET":
         query = "select cve_act, nom_act from actividad"     
@@ -179,12 +189,18 @@ def cargar_grupos_registro():
 
 #     return render_template('personas_registro.html', colonias = colonias)
 
-@app.route('/registro-empleados')
+# --------------------- EMPLEADOS --------------------- #
+
+#/registro-empleados
+@app.route('/empleados/registrar')
 def cargar_empleados_registro():
     return render_template('empleados_registro.html')
 
+# --------------------- ALUMNOS --------------------- #
+
 ### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
-@app.route('/registro-alumnos', methods=['GET', 'POST'])
+# /registro-alumnos
+@app.route('/alumnos/registrar', methods=['GET', 'POST'])
 def cargar_alumnos_registro():
     # if request.method == "POST":
     #     detalles = request.form
@@ -202,7 +218,39 @@ def cargar_alumnos_registro():
 
     return render_template('alumnos_registro.html')
 
-@app.route('/generar-folios', methods=['GET', 'POST'])
+# --------------------- PROVEEDORES --------------------- #
+
+@app.route('/proveedores/registrar', methods=['GET', 'POST'])
+def cargar_proveedores_registro():
+    if request.method == "POST":
+        detalles = request.form
+        _empresa = detalles['empresa']
+        _tel = detalles['tel']
+        _calle = detalles['calle']
+        _num = detalles['num']
+        _orient = detalles['orient']
+        _entrecalles = detalles['entrecalles']
+        _col = detalles['col']
+
+        query = "insert into proveedor values(%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (None, _empresa, _calle, _num, _orient, _entrecalles, _tel, _col)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    query = "select * from colonia"
+    cur.execute(query)
+    colonias = cur.fetchall()
+
+    return render_template('proveedores_registro.html', colonias = colonias)
+
+# --------------------- FOLIOS --------------------- #
+
+# /generar-folios
+@app.route('/folios/generar', methods=['GET', 'POST'])
 def cargar_folios_generar():
     if request.method == "POST":
         detalles = request.form
@@ -225,7 +273,10 @@ def cargar_folios_generar():
 
     return render_template('folios_generar.html')
 
-@app.route('/registro-inscripciones', methods=['GET', 'POST'])
+# --------------------- INSCRIPCIONES --------------------- #
+
+# /registro-inscripciones
+@app.route('/inscripciones/registrar', methods=['GET', 'POST'])
 def cargar_inscripciones_registro():
     if request.method == "POST":
         detalles = request.form
@@ -249,13 +300,90 @@ def cargar_inscripciones_registro():
 
     return render_template('inscripciones_registro.html')
 
-@app.route('/registro-materiales')
-def cargar_materiales_registro():
-    # TODO: programar formulario y mysql
-    return render_template('materiales_registro.html')
+# --------------------- MATERIALES --------------------- #
 
-@app.route('/nominas')
+# /registro-materiales
+@app.route('/materiales/registrar', methods=['GET', 'POST'])
+def cargar_materiales_registro():
+    if request.method == "POST":
+        detalles = request.form
+        _nombre = detalles['nombre']
+        _marca = detalles['marca']
+        _precio = detalles['precio']
+        _actividad = detalles['actividad']
+        _descripcion = detalles['descripcion']
+
+        query = "insert into material values (%s, %s, %s, %s, %s, %s)"
+        values = (None, _nombre, _marca, _precio, _descripcion, _actividad)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    query = "select cve_act, nom_act from actividad"
+    cur.execute(query)
+    
+    actividades = cur.fetchall()
+
+    return render_template('materiales_registro.html', actividades = actividades)
+
+# TODO: Checar que sea correcta la ejecucion
+# /resurtido-materiales
+@app.route('/materiales/suministrar', methods=['GET', 'POST'])
+def cargar_materiales_resurtido():
+    if request.method == "POST":
+        detalles = request.form
+        _material = detalles['material']
+        _proveedor = detalles['proveedor']
+        _cantidad = detalles['cantidad']
+        _ppu = detalles['ppu']
+        _fechaent = detalles['fechaent']
+
+        query = "insert into entrada values (%s, %s, %s, %s, %s, %s)"
+        values = (None, _cantidad, _ppu, _fechaent, _material, _proveedor)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    query = "select * from material m join actividad a on m.cve_act=a.cve_act"
+    cur.execute(query)
+    materiales = cur.fetchall()
+
+    query = "select * from proveedor p join colonia c on p.cve_col=c.cve_col"
+    cur.execute(query)
+    proveedores = cur.fetchall()
+
+    query = "select nombre_mat, cantidad_ent, preciounidad_ent, empresa_prov, fechaent_ent from material m join entrada e on m.cve_mat=e.cve_mat join proveedor p on e.cve_prov=p.cve_prov order by fechaent_ent limit 5"
+    cur.execute(query)
+    listaMateriales = cur.fetchall()
+
+    return render_template('materiales_resurtir.html', materiales = materiales, proveedores = proveedores, listaMateriales = listaMateriales)
+
+# --------------------- NOMINAS --------------------- #
+
+@app.route('/nominas', methods=['GET', 'POST'])
 def cargar_nominas():
+    if request.method == "POST":
+        detalles = request.form
+        _fecha = detalles['fecha']
+        _monto = detalles['monto']
+        _modo = detalles['modo']
+        _empleado = detalles['empleado']
+
+        query = "insert into pagoempleado values (%s, %s, %s, %s, %s)"
+        values = (None, _fecha, _monto, _modo, _empleado)
+
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
     return render_template('nominas.html')
 
 # @app.route('/test', methods=['GET', 'POST'])

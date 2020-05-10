@@ -1,0 +1,267 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Suministrar material{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
+{% endblock %}
+
+{% block contenido %}
+<!-- RESURTIDO DE MATERIALES -->
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Suministrar material</h3>
+
+    <form class="needs-validation" action="" method="POST">
+        <div class="row">
+
+            <div class="col-md-9 mb-3">
+                <!-- <label for="empleado">Docente</label> -->
+                <select class="custom-select d-block w-100" id="material" name="material" required>
+                    <option value="">Material...</option>
+                    {% for i in materiales %}
+                        <option value="{{ i[0] }}">{{ i[1] }}</option>
+                    {% endfor %}
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-3 mb-3">
+                <button type="button" class="btn btn-primary w-100" name="buscarMaterial" id="buscarMaterial" data-toggle="modal" data-target="#buscarMateriales">Buscar material</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarMateriales" tabindex="-1" role="dialog" aria-labelledby="tituloMateriales" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloMateriales">Materiales</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">Material</th>
+                                        <th data-sortable="true">Marca</th>
+                                        <th data-sortable="true">Precio</th>
+                                        <th data-sortable="true">Descripción</th>
+                                        <th data-sortable="true">Actividad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in materiales %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>{{ i[4] }}</td>
+                                            <td>{{ i[7] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-9 mb-3">
+                <!-- <label for="tipo">Tipo de área</label> -->
+                <select class="custom-select d-block w-100" id="proveedor" name="proveedor" required>
+                    <option value="">Proveedor...</option>
+                    {% for i in proveedores %}
+                        <option value="{{ i[0] }}">{{ i[1] }}</option>
+                    {% endfor %}
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-3 mb-3">
+                <button type="button" class="btn btn-primary w-100" name="buscarProveedor" id="buscarProveedor" data-toggle="modal" data-target="#buscarProveedores">Buscar proveedor</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarProveedores" tabindex="-1" role="dialog" aria-labelledby="tituloProveedores" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloProveedores">Proveedores</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">Empresa</th>
+                                        <th data-sortable="true">Dirección</th>
+                                        <th data-sortable="true">Teléfono</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in proveedores %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[2] }} {{ i[3] }} {{ i[4] }} {{ i[9] }}</td>
+                                            <td>{{ i[6] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" value="" maxlength="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese una cantidad válida.
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="number" class="form-control" id="ppu" name="ppu" placeholder="Precio por unidad" value="" maxlength="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un precio válido.
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="date" class="form-control" id="fechaent" name="fechaent" placeholder="Fecha de resurtido" value="" required>
+        
+                <div class="invalid-feedback">
+                    Seleccione una fecha válida.
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <button type="submit" class="botones btn w-100" name="agregar" id="agregar">Agregar</button>
+            </div>
+
+        </div>
+
+        <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
+        <!-- <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div> -->
+
+    </form>
+
+    <hr class="mb-4">
+
+    <div class="container">
+
+        <table
+        data-locale="es-MX"
+        data-toggle="table"
+        data-search="true"
+        >
+            <thead>
+                <tr>
+                    <th data-sortable="true">Material</th>
+                    <th data-sortable="true">Cantidad</th>
+                    <th data-sortable="true">Precio por unidad</th>
+                    <th data-sortable="true">Proveedor</th>
+                    <th data-sortable="true">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in listaMateriales %}
+                    <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                        {% for j in i %}
+                            <td>{{ j }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %} 
+
+                <!-- <tr id="tr-id-1" class="tr-class-1" data-index="0">
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr id="tr-id-2" class="tr-class-2">
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                </tr> -->
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{# <script src="{{ url_for('static', filename='js/scripts/areas_registro.js') }}"></script> #}
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
+
+{% endblock %}

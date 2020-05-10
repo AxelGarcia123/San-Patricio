@@ -1,0 +1,132 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Registrar proveedor{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+{% endblock %}
+
+{% block contenido %}
+<!-- REGISTRO DE PROVEEDORES -->
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Registrar proveedor</h3>
+
+    <form class="needs-validation" action="" method="POST">
+
+        <h5 class="mx-auto mb-4">1. Datos de la empresa</h5>
+
+        <div class="row">
+
+            <div class="col-md-8 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Nombre de la empresa" value="" maxlength="100" required autofocus>
+        
+                <div class="invalid-feedback">
+                    Ingrese un nombre válido.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <!-- <label for="largo">Largo</label> -->
+                <input type="number" class="form-control" id="tel" name="tel" placeholder="Teléfono" value="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un teléfono válido.
+                </div>
+            </div>
+
+        </div>
+
+        <h5 class="mx-auto mb-4">2. Domicilio</h5>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="text" class="form-control" id="calle" name="calle" placeholder="Calle" value="" maxlength="70" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese una calle válida.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="number" class="form-control" id="num" name="num" placeholder="Número" value="" maxlength="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un número válido.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <!-- <label for="genero">Género</label> -->
+                <select class="custom-select d-block w-100" id="orient" name="orient" required>
+                    <option value="">Orientación...</option>
+                    <option value="Norte">Norte</option>
+                    <option value="Sur">Sur</option>
+                    <option value="Oriente">Oriente</option>
+                    <option value="Poniente">Poniente</option>
+                    <option value="Ninguna">Ninguno</option>
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-8 mb-3">
+                <!-- <label for="nombre">Nombre</label> -->
+                <input type="text" class="form-control" id="entrecalles" name="entrecalles" placeholder="Entre calles" value="" maxlength="100" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese una entrada válida.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <!-- <label for="col">Colonia</label> -->
+                <select class="custom-select d-block w-100" id="col" name="col" required>
+                    <option value="">Colonia...</option>
+                    {% for i in colonias %}
+                        <option value="{{ i[0] }}">{{ i[1] }} - {{ i[2] }}</option>
+                    {% endfor %}
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+{# <script src="{{ url_for('static', filename='js/scripts/areas_registro.js') }}"></script> #}
+
+{% endblock %}
