@@ -1,0 +1,49 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Form{% endblock %}
+
+{% block contenido %}
+<!-- REGISTRO DE ALUMNOS -->
+
+<!-- <h5 class="mx-auto mb-4">3. Datos personales</h5> -->
+
+<div class="container">
+ 
+    <form class="form-signin" action="/signUp" method="post" role="form">
+        <h2 class="form-signin-heading">Please Sign Up </h2>
+        <input type="email" name="username" class="form-control" placeholder="Email address" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+
+        <button class="btn btn-lg btn-primary btn-block" type="button" id="button">Register </button>
+    </form>
+
+    <h1 id="h1"></h1>
+ 
+</div>
+
+
+{# <script src="{{ url_for('static', filename='js/scripts/alumnos_registro.js') }}"></script> #}
+
+<script>
+
+    $(function() {
+        $('#button').click(function() {
+            var wea = $('form').serialize()
+            console.log(wea) // username=test%40gmail.com&password=123
+            $.ajax({
+                url: '/signUpUser',
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    console.log(response);
+                    document.getElementById('h1').innerHTML = response
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+</script>
+
+{% endblock %}

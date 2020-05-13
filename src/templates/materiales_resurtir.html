@@ -59,13 +59,17 @@
                         </div>
                         <div class="modal-body">
                             <table
+                            id="tablaMateriales"
                             data-locale="es-MX"
                             data-toggle="table"
                             data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
                             data-pagination="true"
                             >
                                 <thead>
                                     <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
                                         <th data-sortable="true">Clave</th>
                                         <th data-sortable="true">Material</th>
                                         <th data-sortable="true">Marca</th>
@@ -77,6 +81,7 @@
                                 <tbody>
                                     {% for i in materiales %}
                                         <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
                                             <td>{{ i[0] }}</td>
                                             <td>{{ i[1] }}</td>
                                             <td>{{ i[2] }}</td>
@@ -90,7 +95,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary">Seleccionar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarMaterial">Seleccionar</button>
                         </div>
                     </div>
                 </div>
@@ -131,13 +136,17 @@
                         </div>
                         <div class="modal-body">
                             <table
+                            id="tablaProveedores"
                             data-locale="es-MX"
                             data-toggle="table"
                             data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
                             data-pagination="true"
                             >
                                 <thead>
                                     <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
                                         <th data-sortable="true">Clave</th>
                                         <th data-sortable="true">Empresa</th>
                                         <th data-sortable="true">Dirección</th>
@@ -147,6 +156,7 @@
                                 <tbody>
                                     {% for i in proveedores %}
                                         <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
                                             <td>{{ i[0] }}</td>
                                             <td>{{ i[1] }}</td>
                                             <td>{{ i[2] }} {{ i[3] }} {{ i[4] }} {{ i[9] }}</td>
@@ -158,7 +168,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary">Seleccionar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarProveedor">Seleccionar</button>
                         </div>
                     </div>
                 </div>
@@ -215,7 +225,12 @@
 
     <div class="container">
 
+        <div class="toolbar">
+            <h4>Últimos suministros</h4>
+        </div>
+
         <table
+        data-toolbar=".toolbar"
         data-locale="es-MX"
         data-toggle="table"
         data-search="true"
@@ -260,7 +275,7 @@
 
 </div>
 
-{# <script src="{{ url_for('static', filename='js/scripts/areas_registro.js') }}"></script> #}
+<script src="{{ url_for('static', filename='js/scripts/materiales_resurtir.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
 

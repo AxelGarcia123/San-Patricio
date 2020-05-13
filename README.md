@@ -82,7 +82,7 @@ o
 ```
 
 ### TODO (también conocido como Lista de quehaceres): 
-* Evitar el ingreso a URL's directas sin antes haber iniciado sesión.
+* Evitar el ingreso a URL's directas sin antes haber iniciado sesión (crear sesiones).
 * Hacer la ventana de Login responsiva.
 * Hacer funcional el menu_responsive. No tiene referencias hacia ninguna página.
 * Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css. Esto debido a que no sé cómo importar desde web a Flask con url_for, y ni siquiera sé si lo permite el framework.
@@ -94,6 +94,6 @@ o
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.
-* Se elimnaron los archivos JS de JQuery (3.5.0) que no funcionaban correctamente con la última versión de Bootstrap (4.4.x). Se hizo un downgrade de la versión 3.5.0 de JQuery a la versión 3.4.1.
+* Se eliminaron los archivos JS de JQuery (3.5.0) que no funcionaban correctamente con la última versión de Bootstrap (4.4.x). Se hizo un downgrade de la versión 3.5.0 de JQuery a la versión 3.4.1.
 * Se cambió la librería _mysql-connector_ a _mysql-connector-python_, ya que la primera es una versión obsoleta.
 * Se mejoraron las URL's de las páginas para facilitar su acceso.

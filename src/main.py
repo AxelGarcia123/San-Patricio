@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, json
 import mysql.connector
 app = Flask(__name__)
 
@@ -156,67 +156,146 @@ def cargar_grupos_registro():
 
     return render_template('grupos_registro.html')
 
-### TODO: CAMBIAR ESTOS DATOS A registro_alumnos Y registro_empleados
-# @app.route('/registro-personas', methods=['GET', 'POST'])
-# def cargar_personas_registro():      
-#     if request.method == "POST":
-#         detalles = request.form
-#         _curp = detalles['curp']
-#         _nombre = detalles['nombre']
-#         _ap = detalles['ap']
-#         _am = detalles['am']
-#         _tel = detalles['tel']
-#         _fechanac = detalles['fechanac']
-#         _genero = detalles['genero']
-#         _calle = detalles['calle']
-#         _num = detalles['num']
-#         _orient = detalles['orient']
-#         _entrecalles = detalles['entrecalles']
-#         _col = detalles['col']
-
-#         query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-#         values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
-
-#         cur.execute(query, values)
-#         # mydb.commit()
-
-#         return redirect(url_for('cargar_alumnos_registro', curp = _curp))
-#         # return render_template('alumnos_registro.html', curp = _curp) ## NO funciona
-
-#     query = "select * from colonia"
-#     cur.execute(query)
-#     colonias = cur.fetchall()
-
-#     return render_template('personas_registro.html', colonias = colonias)
-
 # --------------------- EMPLEADOS --------------------- #
 
-#/registro-empleados
-@app.route('/empleados/registrar')
+# Ventana principal de empleados
+@app.route('/empleados/')
+def cargar_empleados():
+    queryAux = "select cve_emp, puesto, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto="
+    
+    query = queryAux + "'Administrador' order by nombre"
+    cur.execute(query)
+    administradores = cur.fetchall()
+
+    query = queryAux + "'Docente' order by nombre"
+    cur.execute(query)
+    docentes = cur.fetchall()
+
+    query = queryAux + "'Limpieza' order by nombre"
+    cur.execute(query)
+    limpieza = cur.fetchall()
+
+    query = queryAux + "'Velador' order by nombre"
+    cur.execute(query)
+    veladores = cur.fetchall()
+
+    query = queryAux + "'Director' order by nombre"
+    cur.execute(query)
+    directores = cur.fetchall()
+    return render_template('empleados.html', administradores = administradores, docentes = docentes, limpieza = limpieza, veladores = veladores, directores = directores)
+
+@app.route('/empleado', methods=['POST'])
+def empleado():
+    data = request.form
+    # print(data)
+    # print(data['clave'])
+    # resultado = "wuolaqtalatodosamigosdellutub"
+
+    query = "select * from empleado where cve_emp=" + data['clave']
+    cur.execute(query)
+    resultado = cur.fetchall()
+    print(resultado[0])
+
+    aux = resultado[0]
+
+    # cve_emp | rfc_emp | fechain_emp | fechafin_emp | puesto  | curp_per
+
+    tupla = { "clave": aux[0], "rfc": aux[1] }
+
+    return tupla
+
+@app.route('/signUp')
+def signUp():
+    return render_template('signUp.html')
+
+@app.route('/signUpUser', methods=['POST'])
+def signUpUser():
+    print(request.form)
+    user =  request.form['username']
+    password = request.form['password']
+    return json.dumps({'status':'OK','user':user,'pass':password})
+
+# Registro de empleados
+@app.route('/empleados/registrar', methods=['GET', 'POST'])
 def cargar_empleados_registro():
-    return render_template('empleados_registro.html')
+    if request.method == "POST":
+        detalles = request.form
+        _curp = detalles['curp']
+        _nombre = detalles['nombre']
+        _ap = detalles['ap']
+        _am = detalles['am']
+        _tel = detalles['tel']
+        _fechanac = detalles['fechanac']
+        _genero = detalles['genero']
+        _calle = detalles['calle']
+        _num = detalles['num']
+        _orient = detalles['orient']
+        _entrecalles = detalles['entrecalles']
+        _col = detalles['col']
+
+        query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
+
+        cur.execute(query, values)
+
+        _rfc = detalles['rfc']
+        _fechain = detalles['fechain']
+        _fechafin = detalles['fechafin']
+        _puesto = detalles['puesto']
+
+        query = "insert into empleado values (%s, %s, %s, %s, %s, %s)" 
+        values = (None, _rfc, _fechain, _fechafin, _puesto, _curp)
+
+        cur.execute(query, values)
+        mydb.commit()
+        pass
+
+    query = "select * from colonia"
+    cur.execute(query)
+    colonias = cur.fetchall()
+
+    return render_template('empleados_registro.html', colonias = colonias)
 
 # --------------------- ALUMNOS --------------------- #
 
-### TODO: CHECAR QUE SEA CORRECTA LA EJECUCION
 # /registro-alumnos
 @app.route('/alumnos/registrar', methods=['GET', 'POST'])
 def cargar_alumnos_registro():
-    # if request.method == "POST":
-    #     detalles = request.form
-    #     _estatura = detalles['estatura']
-    #     _peso = detalles['peso']
+    if request.method == "POST":
+        detalles = request.form
+        _curp = detalles['curp']
+        _nombre = detalles['nombre']
+        _ap = detalles['ap']
+        _am = detalles['am']
+        _tel = detalles['tel']
+        _fechanac = detalles['fechanac']
+        _genero = detalles['genero']
+        _calle = detalles['calle']
+        _num = detalles['num']
+        _orient = detalles['orient']
+        _entrecalles = detalles['entrecalles']
+        _col = detalles['col']
 
-    #     query = "insert into alumno values (%s, %s, %s, %s)"
-    #     values = (None, _estatura, _peso, curp)
+        query = "insert into persona values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (_curp, _nombre, _ap, _am, _tel, _fechanac, _genero, _calle, _num, _orient, _entrecalles, _col)
 
-    #     cur.execute(query, values)
-    #     mydb.commit()
+        cur.execute(query, values)
 
-    #     print("INSERCION EXITOSA")
-    #     pass
+        _estatura = detalles['estatura']
+        _peso = detalles['peso']
 
-    return render_template('alumnos_registro.html')
+        query = "insert into alumno values (%s, %s, %s, %s)"
+        values = (None, _estatura, _peso, _curp)
+
+        cur.execute(query, values)
+        mydb.commit()
+        pass
+
+    query = "select * from colonia"
+    cur.execute(query)
+    colonias = cur.fetchall()
+
+    return render_template('alumnos_registro.html', colonias = colonias)
 
 # --------------------- PROVEEDORES --------------------- #
 

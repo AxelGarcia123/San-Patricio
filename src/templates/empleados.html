@@ -1,0 +1,232 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Empleados{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+
+    #boton:focus {
+        box-shadow: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="wrapper flex-grow-1"> 
+
+    <div class="mx-4">
+
+        <div class="row p-0 m-0 h-100">
+        
+            <div class="col-md-3 border-right border-dark">
+        
+                <div class="row justify-content-between pr-4">
+                    <h4>Empleados</h4>
+                    <button class="btn btn-primary">
+                        <span data-feather="user-plus" class="mr-2"></span>
+                        Nuevo
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <!-- <input type="text">Buscar -->
+                
+                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaEmpleados">
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseAdministrador" aria-expanded="false" aria-controls="collapseAdministrador">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Administradores
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ administradores|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if administradores|length > 0 %}
+                                <div class="collapse" id="collapseAdministrador">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in administradores %}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="user"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarEmpleado" type="button" value="{{ i[0] }}">{{ i[2] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                            <!-- <li class="list-group-item p-0">
+                                                <span data-feather="user"></span>
+                                                <button class="btn text-secondary p-0" type="button">Aguilar Gutierrez Saul Andre </button>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseDocentes" aria-expanded="false" aria-controls="collapseDocentes">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Docentes
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ docentes|length }}</span>
+                                </div>  
+                            </button>
+
+                            {% if docentes|length > 0 %}
+                                <div class="collapse" id="collapseDocentes">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in docentes%}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="user"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarEmpleado" type="button" value="{{ i[0] }}">{{ i[2] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseLimpieza" aria-expanded="false" aria-controls="collapseLimpieza">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Limpieza
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ limpieza|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if limpieza|length > 0 %}
+                                <div class="collapse" id="collapseLimpieza">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in limpieza %}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="user"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarEmpleado" type="button" value="{{ i[0] }}">{{ i[2] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseVeladores" aria-expanded="false" aria-controls="collapseVeladores">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Veladores
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ veladores|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if veladores|length > 0 %}
+                                <div class="collapse" id="collapseVeladores">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in veladores %}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="user"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarEmpleado" type="button" value="{{ i[0] }}">{{ i[2] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                        </li>
+
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseDirectores" aria-expanded="false" aria-controls="collapseDirectores">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Directores
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ directores|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if directores|length > 0 %}
+                                <div class="collapse" id="collapseDirectores">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in directores %}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="user"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarEmpleado" type="button" value="{{ i[0] }}">{{ i[2] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                    </ul>
+                
+                </div>       
+        
+            </div>
+        
+            <div class="col-md-9">
+                <h1 id="resultadoh1"></h1> 
+            </div>
+        
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/feather.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts/empleados.js') }}"></script>
+
+<script>
+    feather.replace()
+</script>
+
+{% endblock %}
+
+
+<!-- <a class="nav-link p-0 w-100 d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Docentes
+                                </div>
+                
+                                <span class="badge badge-primary badge-pill"></span>
+                            </a>        -->
