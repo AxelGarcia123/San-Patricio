@@ -86,19 +86,12 @@ o
 - [ ] Hacer la ventana de Login responsiva.
 - [ ] Hacer funcional el menu_responsive. No tiene referencias hacia ninguna página.
 - [ ] Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css. Esto debido a que no sé cómo importar desde web a Flask con url_for, y ni siquiera sé si lo permite el framework.
-<<<<<<< HEAD
 - [ ] Comprobar la ejecución correcta de los scripts de folios e inscripciones.
-=======
-- [ ] Comprobar la ejecución correcta de los scripts de registro de personas, alumnos, folios e inscripciones.
->>>>>>> bc9996b0c66ba2c125b7ee1a84ef65fa95657933
 - [ ] Mejorar las ventanas de folios e inscripciones.
 - [ ] Búsquedas dinámicas de alumnos en ventana de folio.
 - [X] Cambiar el registro de alumnos y empleados. Crear un bloque en personas_registro.html para luego extender y agregar el contenido necesario. 
 - [ ] Mejorar la responsividad de los botones de Guardar y Cancelar en los formularios.
-<<<<<<< HEAD
 - [ ] Formatear fechas salidas de MySQL.
-=======
->>>>>>> bc9996b0c66ba2c125b7ee1a84ef65fa95657933
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.
