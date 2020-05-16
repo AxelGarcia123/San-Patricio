@@ -90,6 +90,62 @@ def cargar_areas_registro():
 
 # --------------------- ACTIVIDADES --------------------- #
 
+# Ventana principal de actividades
+@app.route('/actividades/')
+def cargar_actividades():
+    query = "select * from actividad where tipo_act='Deportiva' order by nom_act"
+    cur.execute(query)
+    actividadesDeportivas = cur.fetchall()
+
+    query = "select * from actividad where tipo_act='Artistica' order by nom_act"
+    cur.execute(query)
+    actividadesArtisticas = cur.fetchall()
+
+    return render_template('actividades.html', actividadesDeportivas = actividadesDeportivas, actividadesArtisticas = actividadesArtisticas)
+
+@app.route('/actividad', methods=['POST'])
+def actividad():
+    data = request.form
+    query = "select * from actividad where cve_act=" + data['clave']
+    cur.execute(query)
+    _actividad = cur.fetchall()
+
+    actividad = _actividad[0]
+
+    _tipo = None
+
+    for i in actividad[2]:
+        _tipo = i
+
+    # query = "select g.* from grupo g join actividad a on g.cve_act=a.cve_act where g.cve_act=" + data['clave']
+    query = "select g.*, a.nom_act, concat(p.nom_per, ' ', p.ap_per, ' ', p.am_per) from grupo g join actividad a on g.cve_act=a.cve_act join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_act=" + data['clave']
+    cur.execute(query)
+    grupos = cur.fetchall()
+
+    grupos_dict = []
+
+    for grupo in grupos:
+        grupo_dict = {
+            "horaent": str(grupo[1]),
+            "horasali": str(grupo[2]),
+            "fechaini": str(grupo[3]),
+            "fechafin": str(grupo[4]),
+            "maxalumnos": grupo[5],
+            "minalumnos": grupo[6],
+            "are": grupo[10],
+            "emp": grupo[11]
+        }
+        grupos_dict.append(grupo_dict)
+
+    tupla = {
+        "actividad": [
+            { "clave": actividad[0], "nom": actividad[1], "tipo": _tipo, "descrip": actividad[3] }
+        ],
+        "grupos": grupos_dict
+    }
+
+    return tupla
+
 # /registro-actividades
 @app.route('/actividades/registrar', methods=['GET', 'POST'])
 def cargar_actividades_registro():
@@ -106,12 +162,13 @@ def cargar_actividades_registro():
         mydb.commit()
 
         print("INSERCION EXITOSA")
-        pass
+        return redirect(url_for('cargar_actividades'))
 
     return render_template('actividades_registro.html')
 
 # --------------------- GRUPOS --------------------- #
 
+# Ventana principal de grupos
 # @app.route('/grupos/')
 # def cargar_grupos():
 #     return render_template('grupos.html')
@@ -224,7 +281,6 @@ def empleado():
     gruposDict = [] # Diccionario de grupos
 
     for grupo in grupos: # Esta es la forma mas sencilla de generar un JSON para retornar una respuesta
-        print( "LONGITUD ====== ", len(grupo) )
         grupoDict = {
             "clave": grupo[0],
             'horaent': str(grupo[1]),
@@ -260,10 +316,6 @@ def empleado():
     # print(tupla.laborales)
 
     return tupla
-
-def Convert(lst): 
-    res_dct = {lst[i]: lst[i + 1] for i in range(0, len(lst), 2)} 
-    return res_dct 
 
 @app.route('/signUp')
 def signUp():
@@ -319,6 +371,12 @@ def cargar_empleados_registro():
     return render_template('empleados_registro.html', colonias = colonias)
 
 # --------------------- ALUMNOS --------------------- #
+
+# Ventana principal de alumnos
+@app.route('/alumnos/')
+def cargar_alumnos():
+    query = "select * from alumno"
+    return render_template('alumnos.html')
 
 # /registro-alumnos
 @app.route('/alumnos/registrar', methods=['GET', 'POST'])

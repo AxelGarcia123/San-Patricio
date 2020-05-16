@@ -1,0 +1,313 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Actividades{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+
+    #boton:focus {
+        box-shadow: none;
+    }
+
+    .btnEditar {
+        background-color: #1DE9B6;
+        color: white;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="wrapper flex-grow-1"> 
+
+    <div class="mx-4">
+
+        <div class="row p-0 m-0 h-100">
+        
+            <div class="col-md-3 border-right border-dark">
+        
+                <div class="row justify-content-between pr-4">
+                    <h4>Actividades</h4>
+                    <!-- <button class="btn btn-primary">
+                        <span data-feather="user-plus" class="mr-2"></span>
+                        Nuevo
+                    </button> -->
+
+                    <a href="/actividades/registrar" class="btn btn-primary">
+                        <span data-feather="user-plus" class="mr-2"></span>
+                        Nueva
+                    </a>
+                </div>
+                
+                <div class="row">
+                    <!-- <input type="text">Buscar -->
+                
+                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaEmpleados">
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseDeportivas" aria-expanded="false" aria-controls="collapseDeportivas">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Deportivas
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ actividadesDeportivas|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if actividadesDeportivas|length > 0 %}
+                                <div class="collapse" id="collapseDeportivas">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in actividadesDeportivas %}
+                                                <li class="list-group-item px-2">
+                                                    <span data-feather="pen-tool"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarActividad" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                            <!-- <li class="list-group-item p-0">
+                                                <span data-feather="user"></span>
+                                                <button class="btn text-secondary p-0" type="button">Aguilar Gutierrez Saul Andre </button>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                        <li class="list-group-item py-2 px-0">
+                
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseArtisticas" aria-expanded="false" aria-controls="collapseArtisticas">
+                                <div>
+                                    <span data-feather="chevron-right"></span>
+                                    Artísticas
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-primary badge-pill" id="">{{ actividadesArtisticas|length }}</span>
+                                </div>  
+                            </button>
+                            
+                            {% if actividadesArtisticas|length > 0 %}
+                                <div class="collapse" id="collapseArtisticas">
+                                    <div class="card card-body border-0">
+                                        <ul class="list-group-flush p-0">
+                                            {% for i in actividadesArtisticas %}
+                                                <li class="list-group-item p-0">
+                                                    <span data-feather="pen-tool"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarActividad" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                
+                        </li>
+
+                    </ul>
+                
+                </div>       
+        
+            </div>
+        
+            <!-- SECCION DE DATOS -->
+            <div class="col-md-9" id="datos" hidden>
+                
+                <div class="row border-bottom border-dark p-3">
+                    <div class="col-md-12 d-flex justify-content-around">
+                        <button class="btn btnSeccion" value="detalles">Detalles</button>
+                        <button class="btn btnSeccion" value="grupos">Grupos</button>
+                        <!-- <button class="btn btnSeccion" value="datosActividades" id="_datosActividades" hidden>Actividades</button>
+                        <button class="btn btnSeccion" value="datosGrupos" id="_datosGrupos" hidden>Grupos</button> -->
+                        <!-- <button class="btn btnSeccion">Horarios</button> -->
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+
+                    <!-- <div class="col-md-4">
+          
+                        <div class="container">
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                   
+                                    
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    <h5 id="nombre"></h5>
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    <h5 id="puesto" class=""></h5>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> -->
+
+                    <!-- SECCION DE DETALLES -->
+                    <div class="col-md-12" id="detalles" hidden>
+
+                        <div class="container">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Actividad</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="nom"></h5></div></div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Tipo</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="tipo"></h5></div></div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Descripción</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12"> 
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="descrip"></h5></div></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- SECCION DE GRUPOS -->
+                    <div class="col-md-12" id="grupos" hidden>
+
+                        <div class="container">
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="toolbar">
+                                        <h5 class="font-weight-bold">Activos</h5>
+                                    </div>
+                            
+                                    <table
+                                    id="tabla"
+                                    class=""
+                                    data-toolbar=".toolbar"
+                                    data-locale="es-MX"
+                                    data-search="true"
+                                    data-toggle="table"
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th data-sortable="true">Turno</th>
+                                                <th data-sortable="true">Lapso</th>
+                                                <th data-sortable="true">Alumnos mín/max</th>
+                                                <th data-sortable="true">Área</th>
+                                                <th data-sortable="true">Docente</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaActivos">
+
+                                            
+                            
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+                                <!-- <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">RFC</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="rfc"></h5></div></div>
+                                </div> -->
+                            </div>
+
+                            <hr>
+
+                            <!-- <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Puesto</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="puestoL"></h5></div></div>
+                                </div>
+                            </div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/feather.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts/actividades.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
+
+<script>
+    feather.replace()
+</script>
+
+{% endblock %}
