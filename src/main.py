@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect, url_for, json
+from flask import Flask, render_template, request, redirect, url_for, json, jsonify
 import mysql.connector
+import json
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
@@ -127,7 +128,7 @@ def cargar_grupos_registro():
         cur.execute(query)
         areas = cur.fetchall()
 
-        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per"  
+        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto='Docente'"  
         cur.execute(query)
         empleados = cur.fetchall()
 
@@ -189,20 +190,80 @@ def empleado():
     data = request.form
     # print(data)
     # print(data['clave'])
-    # resultado = "wuolaqtalatodosamigosdellutub"
 
-    query = "select * from empleado where cve_emp=" + data['clave']
+    query = "select * from empleado e join persona p on e.curp_per=p.curp_per where cve_emp=" + data['clave']
     cur.execute(query)
     resultado = cur.fetchall()
-    print(resultado[0])
 
-    aux = resultado[0]
+    # print(type(resultado))
+    # print(type(resultado[0]))
+    # print(resultado)
 
-    # cve_emp | rfc_emp | fechain_emp | fechafin_emp | puesto  | curp_per
+    datosEmpleado = resultado[0]
 
-    tupla = { "clave": aux[0], "rfc": aux[1] }
+    _puesto = None
+    _genero = None
+    _orient = None
+
+    for x in datosEmpleado[4]: # Esta es la unica forma de acceder a un elemento de un set(conjunto)
+        _puesto = x
+
+    for x in datosEmpleado[12]:
+        _genero = x
+
+    for x in datosEmpleado[15]:
+        _orient = x
+
+    query = "select * from grupo where cve_emp=" + str(datosEmpleado[0])
+    cur.execute(query)
+    grupos = cur.fetchall()
+    # print(grupos)
+    # print(type(grupos))
+    # print(type(grupos[0]))
+
+    gruposDict = [] # Diccionario de grupos
+
+    for grupo in grupos: # Esta es la forma mas sencilla de generar un JSON para retornar una respuesta
+        print( "LONGITUD ====== ", len(grupo) )
+        grupoDict = {
+            "clave": grupo[0],
+            'horaent': str(grupo[1]),
+            "horasali": str(grupo[2]),
+            "fechaini": str(grupo[3]),
+            "fechafin": str(grupo[4]),
+            "maxalumnos": grupo[5],
+            "minalumnos": grupo[6],
+            "act": grupo[7],
+            "are": grupo[8]
+        }
+        gruposDict.append(grupoDict)
+
+    # x = json.dumps(grupos, indent=4, sort_keys=True, default=str) # Esto no funciona -_-
+    # xX = json.loads(x) # Que perdida de tiempo e.e
+    # gG = Convert(xX)
+
+    tupla = { 
+        "laborales": [
+            { "clave": datosEmpleado[0], "rfc": datosEmpleado[1], "fechain": datosEmpleado[2], "fechafin": datosEmpleado[3], "puesto": _puesto }
+        ],
+        "personales": [
+            { "curp": datosEmpleado[5], "nombre": datosEmpleado[7] + " " + datosEmpleado[8] + " " + datosEmpleado[9], "tel": datosEmpleado[10],
+            "fechanac": datosEmpleado[11], "genero": _genero, 
+            "domicilio": datosEmpleado[13] + " " + _orient + " " + str(datosEmpleado[14]) }
+        ],
+        "grupos": gruposDict
+    }
+
+    # print(tupla)
+    # print("tupla = ", type(tupla))
+
+    # print(tupla.laborales)
 
     return tupla
+
+def Convert(lst): 
+    res_dct = {lst[i]: lst[i + 1] for i in range(0, len(lst), 2)} 
+    return res_dct 
 
 @app.route('/signUp')
 def signUp():
@@ -248,7 +309,8 @@ def cargar_empleados_registro():
 
         cur.execute(query, values)
         mydb.commit()
-        pass
+        return redirect(url_for('cargar_empleados'))
+        # pass
 
     query = "select * from colonia"
     cur.execute(query)
