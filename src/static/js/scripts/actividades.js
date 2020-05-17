@@ -51,13 +51,14 @@ $('.btnMostrarActividad').click(function() {
             var html = ""
 
             for (let i = 0; i < response.grupos.length; i++) {
-                html += "<tr id='tr-id-" + (i+1) + "' class='tr-class-" + (i + 1) + "'></tr>"
-                let grupo = response.grupos[i]
-                html += "<td>" + grupo.horaent + " - " + grupo.horasali + "</td>"
-                html += "<td>" + grupo.fechaini + " - " + grupo.fechafin + "</td>"
-                html += "<td>" + grupo.minalumnos + "/" + grupo.maxalumnos + "</td>"
-                html += "<td>" + grupo.are + "</td>"
-                html += "<td>" + grupo.emp + "</td>"
+                html += "<tr id='tr-id-" + (i+1) + "' class='tr-class-" + (i + 1) + "'>"
+                    let grupo = response.grupos[i]
+                    html += "<td>" + grupo.horaent + " - " + grupo.horasali + "</td>"
+                    html += "<td>" + grupo.fechaini + " - " + grupo.fechafin + "</td>"
+                    html += "<td>" + grupo.minalumnos + "/" + grupo.maxalumnos + "</td>"
+                    html += "<td>" + grupo.are + "</td>"
+                    html += "<td>" + grupo.emp + "</td>"
+                html += "</tr>"
             }
 
             console.log(response.grupos)

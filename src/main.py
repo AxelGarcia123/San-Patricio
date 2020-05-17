@@ -40,7 +40,7 @@ def cargar_menu():
 def cargar_menu_responsive():
     return render_template('menu_responsive.html')
 
-# --------------------- AREAS --------------------- #
+# --------------------- AREAS --------------------- ## --------------------- AREAS --------------------- #
 
 @app.route('/areas/')
 def cargar_areas():
@@ -88,7 +88,7 @@ def cargar_areas_registro():
 
     return render_template('areas_registro.html')
 
-# --------------------- ACTIVIDADES --------------------- #
+# --------------------- ACTIVIDADES --------------------- ## --------------------- ACTIVIDADES --------------------- #
 
 # Ventana principal de actividades
 @app.route('/actividades/')
@@ -166,7 +166,7 @@ def cargar_actividades_registro():
 
     return render_template('actividades_registro.html')
 
-# --------------------- GRUPOS --------------------- #
+# --------------------- GRUPOS --------------------- ## --------------------- GRUPOS --------------------- #
 
 # Ventana principal de grupos
 # @app.route('/grupos/')
@@ -214,7 +214,7 @@ def cargar_grupos_registro():
 
     return render_template('grupos_registro.html')
 
-# --------------------- EMPLEADOS --------------------- #
+# --------------------- EMPLEADOS --------------------- ## --------------------- EMPLEADOS --------------------- #
 
 # Ventana principal de empleados
 @app.route('/empleados/')
@@ -370,13 +370,70 @@ def cargar_empleados_registro():
 
     return render_template('empleados_registro.html', colonias = colonias)
 
-# --------------------- ALUMNOS --------------------- #
+# --------------------- ALUMNOS --------------------- ## --------------------- ALUMNOS --------------------- #
 
 # Ventana principal de alumnos
 @app.route('/alumnos/')
 def cargar_alumnos():
-    query = "select * from alumno"
-    return render_template('alumnos.html')
+    query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from grupo g join registroinscripcion ri on g.cve_gru=ri.cve_gru join folio f on ri.folio_insc=f.folio_fol join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru"
+    cur.execute(query)
+    inscritos = cur.fetchall()
+
+    # query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from folio f join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per where not exists(select folio_fol, folio_insc from folio f, registroinscripcion ri where folio_fol=folio_insc)"
+    query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from folio f join registroinscripcion ri on f.folio_fol!=ri.folio_insc join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per"
+    cur.execute(query)
+    noInscritos = cur.fetchall()
+
+    return render_template('alumnos.html', inscritos = inscritos, noInscritos = noInscritos)
+
+@app.route('/alumno', methods=['POST'])
+def alumno():
+    data = request.form
+
+    query = "select a.*, concat(p.nom_per, ' ', ap_per, ' ', am_per) as nombre, p.tel_per, p.fechanac_per, p.genero_per, concat(p.calle_per, ' ', p.orient_per, ' ', p.numero_per) as direccion from alumno a join persona p on a.curp_per=p.curp_per where a.cve_alu=" + data['clave']
+    cur.execute(query)
+    _alumno = cur.fetchall()
+
+    alumno = _alumno[0]
+
+    _genero = None
+
+    for i in alumno[7]:
+        _genero = i
+
+    query = "select f.*, ac.nom_act from folio f join alumno a on f.cve_alu=a.cve_alu join actividad ac on f.cve_act=ac.cve_act where f.cve_alu=" + data['clave'] + " order by fecha_fol limit 1"
+    cur.execute(query)
+    folio = cur.fetchall()
+
+    # print("folio = ", folio)
+
+    tupla = {
+        "alumno": [
+            { "clave": alumno[0], "estatura": alumno[1], "peso": alumno[2] }
+        ],
+        "personales": [
+            { "curp": alumno[3], "nombre": alumno[4], "tel": alumno[5], "fechanac": str(alumno[6]), "genero": _genero, "domicilio": alumno[8] }
+        ],
+        "folio": folio
+    }
+
+    print(tupla)
+    return tupla
+
+@app.route('/alumnoInscribir', methods=['POST'])
+def alumnoInscribir():
+    data = request.form
+    print("data = ", data)
+
+    query = "insert into registroinscripcion values(%s, %s, %s, %s, %s)"
+    values = (data['folio'], data['fecha'], data['importe'], data['importe'], data['grupo'])
+
+    cur.execute(query, values)
+    mydb.commit()
+
+    return "OK"
+
+import time
 
 # /registro-alumnos
 @app.route('/alumnos/registrar', methods=['GET', 'POST'])
@@ -408,16 +465,36 @@ def cargar_alumnos_registro():
         values = (None, _estatura, _peso, _curp)
 
         cur.execute(query, values)
+        # mydb.commit()
+
+        _costo = detalles['costo']
+        _act = detalles['act']
+
+        query = "select max(cve_alu) from alumno"
+        cur.execute(query)
+        _alumno = cur.fetchall()
+
+        alumno = _alumno[0]
+
+        query = "insert into folio values(%s, %s, %s, %s, %s)"
+        values = (None, time.strftime('%Y-%m-%d %H:%M:%S'), _costo, alumno[0], _act)
+
+        cur.execute(query, values)
         mydb.commit()
-        pass
+
+        return redirect(url_for('cargar_alumnos'))
 
     query = "select * from colonia"
     cur.execute(query)
     colonias = cur.fetchall()
 
-    return render_template('alumnos_registro.html', colonias = colonias)
+    query = "select cve_act, concat(nom_act, ' - ', tipo_act) from actividad"
+    cur.execute(query)
+    actividades = cur.fetchall()
 
-# --------------------- PROVEEDORES --------------------- #
+    return render_template('alumnos_registro.html', colonias = colonias, actividades = actividades)
+
+# --------------------- PROVEEDORES --------------------- ## --------------------- PROVEEDORES --------------------- #
 
 @app.route('/proveedores/registrar', methods=['GET', 'POST'])
 def cargar_proveedores_registro():
@@ -446,60 +523,12 @@ def cargar_proveedores_registro():
 
     return render_template('proveedores_registro.html', colonias = colonias)
 
-# --------------------- FOLIOS --------------------- #
+# --------------------- MATERIALES --------------------- ## --------------------- MATERIALES --------------------- #
 
-# /generar-folios
-@app.route('/folios/generar', methods=['GET', 'POST'])
-def cargar_folios_generar():
-    if request.method == "POST":
-        detalles = request.form
-        _fecha = detalles['fecha']
-        _hora = detalles['hora']
-        _costo = detalles['costo']
-        _alumno = detalles['alumno']
-        _actividad = detalles['actividad']
-
-        _fechaHora = _fecha + " " + _hora
-
-        query = "insert into folio values (%s, %s, %s, %s, %s)"
-        values = (None, _fechaHora, _costo, _alumno, _actividad)
-
-        cur.execute(query, values)
-        mydb.commit()
-
-        print("INSERCION EXITOSA")
-        pass
-
-    return render_template('folios_generar.html')
-
-# --------------------- INSCRIPCIONES --------------------- #
-
-# /registro-inscripciones
-@app.route('/inscripciones/registrar', methods=['GET', 'POST'])
-def cargar_inscripciones_registro():
-    if request.method == "POST":
-        detalles = request.form
-        _folio = detalles['folio']
-        _fecha = detalles['fecha']
-        _hora = detalles['hora']
-        _importe = detalles['importe']
-        _total = detalles['total']
-        _grupo = detalles['grupo']
-
-        _fechaHora = _fecha + " " + _hora
-
-        query = "insert into registroinscripcion values (%s, %s, %s, %s, %s)"
-        values = (_folio, _fechaHora, _importe, _total, _grupo)
-
-        cur.execute(query, values)
-        mydb.commit()
-
-        print("INSERCION EXITOSA")
-        pass
-
-    return render_template('inscripciones_registro.html')
-
-# --------------------- MATERIALES --------------------- #
+# Ventana principal de materiales
+@app.route('/materiales/')
+def cargar_materiales():
+    return render_template('materiales.html')
 
 # /registro-materiales
 @app.route('/materiales/registrar', methods=['GET', 'POST'])
