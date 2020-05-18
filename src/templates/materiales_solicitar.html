@@ -1,0 +1,266 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Solicitar material{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Solicitar material</h3>
+
+    <form class="needs-validation"  action="" method="POST">
+        <div class="row ">
+
+            <div class="col-md-8 mb-3">
+                <label for="persona">Solicitante</label>
+                <input type="text" class="form-control" id="persona" name="persona" placeholder="" value="" required disabled>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-4 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100" name="buscarPersona" id="buscarPersona" data-toggle="modal" data-target="#buscarPersonas">Buscar persona</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarPersonas" tabindex="-1" role="dialog" aria-labelledby="tituloPersonas" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloPersonas">Personas</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                Empleados
+                                            </button>
+                                        </h2>
+                                    </div>
+                                
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            
+                                            <table
+                                                id="tablaEmpleados"
+                                                data-locale="es-MX"
+                                                data-toggle="table"
+                                                data-search="true"
+                                                data-single-select="true"
+                                                data-click-to-select="true"
+                                                data-pagination="true"
+                                                >
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-field="state" data-checkbox="true"></th>
+                                                            <th data-sortable="true">CURP</th>
+                                                            <th data-sortable="true">Nombre</th>
+                                                            <th data-sortable="true">Domicilio</th>
+                                                            <th data-sortable="true">Teléfono</th>
+                                                            <th data-sortable="true">Puesto</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for i in empleados %}
+                                                            <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                                                <td data-field="state" data-checkbox="true"></td>
+                                                                <td>{{ i[0] }}</td>
+                                                                <td>{{ i[1] }}</td>
+                                                                <td>{{ i[2] }}</td>
+                                                                <td>{{ i[3] }}</td>
+                                                                <td>{{ i[4] }}</td>
+                                                            </tr>
+                                                        {% endfor %} 
+                                                    </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                Alumnos
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            
+                                            <table
+                                                id="tablaAlumnos"
+                                                data-locale="es-MX"
+                                                data-toggle="table"
+                                                data-search="true"
+                                                data-single-select="true"
+                                                data-click-to-select="true"
+                                                data-pagination="true"
+                                                >
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-field="state" data-checkbox="true"></th>
+                                                            <th data-sortable="true">CURP</th>
+                                                            <th data-sortable="true">Nombre</th>
+                                                            <th data-sortable="true">Domicilio</th>
+                                                            <th data-sortable="true">Teléfono</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for i in alumnos %}
+                                                            <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                                                <td data-field="state" data-checkbox="true"></td>
+                                                                <td>{{ i[0] }}</td>
+                                                                <td>{{ i[1] }}</td>
+                                                                <td>{{ i[2] }}</td>
+                                                                <td>{{ i[3] }}</td>
+                                                            </tr>
+                                                        {% endfor %} 
+                                                    </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarPersona">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-8 mb-3">
+                <label for="material">Material</label>
+                <input type="text" class="form-control" id="material" name="material" placeholder="" value="" required disabled>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-4 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100" name="buscarMaterial" id="buscarMaterial" data-toggle="modal" data-target="#buscarMateriales">Buscar material</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarMateriales" tabindex="-1" role="dialog" aria-labelledby="tituloMateriales" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloMateriales">Materiales</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table
+                            id="tablaMateriales"
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">Material</th>
+                                        <th data-sortable="true">Marca</th>
+                                        <th data-sortable="true">Precio</th>
+                                        <th data-sortable="true">Descripción</th>
+                                        <th data-sortable="true">Actividad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in materiales %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>{{ i[4] }}</td>
+                                            <td>{{ i[7] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarMaterial">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-8 mb-3">
+                <label for="cantidad">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" value="" maxlength="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese una cantidad válida.
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="botones btn w-100" name="agregar" id="agregar">Agregar</button>
+            </div>
+
+        </div>
+
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="reset" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/scripts/materiales_solicitar.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
+
+{% endblock %}

@@ -1,5 +1,5 @@
 {% extends "menu_responsive.html" %}
-{% block titulo %}Materiales{% endblock %}
+{% block titulo %}Nóminas{% endblock %}
 
 {% block css %}
 
@@ -57,42 +57,42 @@
             <div class="col-md-3 border-right border-dark">
         
                 <div class="row justify-content-between pr-4">
-                    <h4>Materiales</h4>
+                    <h4>Solicitudes</h4>
                     <!-- <button class="btn btn-primary">
                         <span data-feather="user-plus" class="mr-2"></span>
                         Nuevo
                     </button> -->
 
-                    <a href="/materiales/registrar" class="btn btn-primary">
+                    <a href="/solicitudes/solicitar" class="btn btn-primary">
                         <span data-feather="plus" class="mr-2"></span>
-                        Nuevo
+                        Nueva
                     </a>
                 </div>
                 
                 <div class="row">
                     <!-- <input type="text">Buscar -->
                 
-                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaEmpleados">
+                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaSolicitudes">
                         <li class="list-group-item py-2 px-0">
                 
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseInscritos" aria-expanded="false" aria-controls="collapseInscritos">
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseSolicitudes" aria-expanded="false" aria-controls="collapseSolicitudes">
                                 <div>
                                     <span data-feather="chevron-right"></span>
-                                    Todos
+                                    Todas
                                 </div>
 
                                 <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ materiales|length }}</span>
+                                    <span class="badge badge-primary badge-pill" id="">{{ solicitudes|length }}</span>
                                 </div>  
                             </button>
                             
-                            {% if materiales|length > 0 %}
-                                <div class="collapse" id="collapseInscritos">
+                            {% if solicitudes|length > 0 %}
+                                <div class="collapse" id="collapseSolicitudes">
                                     <div class="card card-body border-0">
                                         <ul class="list-group-flush p-0">
-                                            {% for i in materiales %}
+                                            {% for i in solicitudes %}
                                                 <li class="list-group-item p-0">
-                                                    <span data-feather="box"></span>
+                                                    <span data-feather="user"></span>
                                                     <button class="btn text-secondary p-0 btnMostrar" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
                                                 </li>
                                             {% endfor %}
@@ -118,10 +118,9 @@
                 
                 <div class="row border-bottom border-dark p-3">
                     <div class="col-md-12 d-flex justify-content-around">
-                        <button class="btn btnSeccion" value="datosGenerales">Datos generales</button>
-                        <!-- <button class="btn btnSeccion" value="datosAcademicos" id="btnDatosAcademicos" hidden>Datos académicos</button> -->
-                        <button class="btn btnSeccion" value="datosSuministro">Suministro</button>
-                        <button class="btn"><a href="/materiales/suministrar">Agregar</a></button>
+                        <button class="btn btnSeccion" value="datosGenerales">Detalles</button>
+                        <button class="btn btnSeccion" value="datosAcademicos" id="btnDatosAcademicos" hidden>Datos académicos</button>
+                        <button class="btn btnSeccion" value="datosInscripcion">Inscripción</button>
                         <!-- <button class="btn btnSeccion" value="datosActividades" id="_datosActividades" hidden>Actividades</button>
                         <button class="btn btnSeccion" value="datosGrupos" id="_datosGrupos" hidden>Grupos</button> -->
                         <!-- <button class="btn btnSeccion">Horarios</button> -->
@@ -130,11 +129,12 @@
 
                 <div class="row mt-4">
 
-                    <!-- <div class="col-md-4">
+                    <div class="col-md-4">
           
                         <div class="container">
                             <div class="row text-center">
                                 <div class="col-md-12">
+                                    <!-- IMAGEN -->
                                     <img src="{{ url_for('static', filename='images/person.jpg') }}" alt="Persona" height="100" width="100">
                                 </div>
                             </div>
@@ -146,10 +146,10 @@
                             </div>
                         </div>
 
-                    </div> -->
+                    </div>
 
                     <!-- SECCION DE DATOS PERSONALES -->
-                    <div class="col-md-12" id="datosGenerales" hidden>
+                    <div class="col-md-8" id="datosGenerales" hidden>
 
                         <div class="container">
 
@@ -157,13 +157,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Nombre</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">CURP</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="nombre"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="curp"></h5></div></div>
                                 </div>
                             </div>
 
@@ -173,13 +173,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Marca</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Domicilio</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="marca"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="domicilio"></h5></div></div>
                                 </div>
                             </div>
 
@@ -189,13 +189,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Precio</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Fecha de nacimiento</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12"> 
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="precio"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="fnac"></h5></div></div>
                                 </div>
                             </div>
 
@@ -205,13 +205,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Actividad</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Sexo</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="act"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="sexo"></h5></div></div>
                                 </div>
                             </div>
 
@@ -221,15 +221,89 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Descripción</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Teléfono</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="descripcion"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="tel"></h5></div></div>
                                 </div>
                             </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Estatura</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="estatura"></h5></div></div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Peso</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="peso"></h5></div></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- SECCION DE DATOS ACADEMICOS -->
+                    <div class="col-md-8" id="datosAcademicos" hidden>
+
+                        <div class="container">
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+
+
+                                    <!-- <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Grupo</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                
+                                <!-- <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="fechain"></h5></div></div>
+                                </div> -->
+                            </div>
+
+                            <!-- <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Fecha final de contrato</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="fechafin"></h5></div></div>
+                                </div>
+                            </div> -->
 
                         </div>
 
@@ -291,7 +365,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/feather.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/scripts/materiales.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts/nominas.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
 

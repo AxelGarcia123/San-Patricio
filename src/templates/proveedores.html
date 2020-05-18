@@ -1,5 +1,5 @@
 {% extends "menu_responsive.html" %}
-{% block titulo %}Materiales{% endblock %}
+{% block titulo %}Proveedores{% endblock %}
 
 {% block css %}
 
@@ -57,13 +57,13 @@
             <div class="col-md-3 border-right border-dark">
         
                 <div class="row justify-content-between pr-4">
-                    <h4>Materiales</h4>
+                    <h4>Proveedores</h4>
                     <!-- <button class="btn btn-primary">
                         <span data-feather="user-plus" class="mr-2"></span>
                         Nuevo
                     </button> -->
 
-                    <a href="/materiales/registrar" class="btn btn-primary">
+                    <a href="/proveedores/registrar" class="btn btn-primary">
                         <span data-feather="plus" class="mr-2"></span>
                         Nuevo
                     </a>
@@ -75,24 +75,24 @@
                     <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaEmpleados">
                         <li class="list-group-item py-2 px-0">
                 
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseInscritos" aria-expanded="false" aria-controls="collapseInscritos">
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseProveedores" aria-expanded="false" aria-controls="collapseProveedores">
                                 <div>
                                     <span data-feather="chevron-right"></span>
                                     Todos
                                 </div>
 
                                 <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ materiales|length }}</span>
+                                    <span class="badge badge-primary badge-pill" id="">{{ proveedores|length }}</span>
                                 </div>  
                             </button>
                             
-                            {% if materiales|length > 0 %}
-                                <div class="collapse" id="collapseInscritos">
+                            {% if proveedores|length > 0 %}
+                                <div class="collapse" id="collapseProveedores">
                                     <div class="card card-body border-0">
                                         <ul class="list-group-flush p-0">
-                                            {% for i in materiales %}
+                                            {% for i in proveedores %}
                                                 <li class="list-group-item p-0">
-                                                    <span data-feather="box"></span>
+                                                    <span data-feather="truck"></span>
                                                     <button class="btn text-secondary p-0 btnMostrar" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
                                                 </li>
                                             {% endfor %}
@@ -121,7 +121,6 @@
                         <button class="btn btnSeccion" value="datosGenerales">Datos generales</button>
                         <!-- <button class="btn btnSeccion" value="datosAcademicos" id="btnDatosAcademicos" hidden>Datos académicos</button> -->
                         <button class="btn btnSeccion" value="datosSuministro">Suministro</button>
-                        <button class="btn"><a href="/materiales/suministrar">Agregar</a></button>
                         <!-- <button class="btn btnSeccion" value="datosActividades" id="_datosActividades" hidden>Actividades</button>
                         <button class="btn btnSeccion" value="datosGrupos" id="_datosGrupos" hidden>Grupos</button> -->
                         <!-- <button class="btn btnSeccion">Horarios</button> -->
@@ -157,13 +156,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Nombre</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Empresa</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="nombre"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="empresa"></h5></div></div>
                                 </div>
                             </div>
 
@@ -173,13 +172,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Marca</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Domicilio</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="marca"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="domicilio"></h5></div></div>
                                 </div>
                             </div>
 
@@ -189,45 +188,13 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Precio</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Teléfono</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12"> 
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="precio"></h5></div></div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Actividad</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="act"></h5></div></div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Descripción</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="descripcion"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="tel"></h5></div></div>
                                 </div>
                             </div>
 
@@ -291,7 +258,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/feather.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/scripts/materiales.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts/proveedores.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
 

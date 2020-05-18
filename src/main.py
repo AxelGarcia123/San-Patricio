@@ -40,7 +40,7 @@ def cargar_menu():
 def cargar_menu_responsive():
     return render_template('menu_responsive.html')
 
-# --------------------- AREAS --------------------- ## --------------------- AREAS --------------------- #
+# --------------------- AREAS --------------------- ## --------------------- s_AREAS --------------------- #
 
 @app.route('/areas/')
 def cargar_areas():
@@ -88,7 +88,7 @@ def cargar_areas_registro():
 
     return render_template('areas_registro.html')
 
-# --------------------- ACTIVIDADES --------------------- ## --------------------- ACTIVIDADES --------------------- #
+# --------------------- ACTIVIDADES --------------------- ## --------------------- s_ACTIVIDADES --------------------- #
 
 # Ventana principal de actividades
 @app.route('/actividades/')
@@ -166,7 +166,7 @@ def cargar_actividades_registro():
 
     return render_template('actividades_registro.html')
 
-# --------------------- GRUPOS --------------------- ## --------------------- GRUPOS --------------------- #
+# --------------------- GRUPOS --------------------- ## --------------------- s_GRUPOS --------------------- #
 
 # Ventana principal de grupos
 # @app.route('/grupos/')
@@ -214,7 +214,7 @@ def cargar_grupos_registro():
 
     return render_template('grupos_registro.html')
 
-# --------------------- EMPLEADOS --------------------- ## --------------------- EMPLEADOS --------------------- #
+# --------------------- EMPLEADOS --------------------- ## --------------------- s_EMPLEADOS --------------------- #
 
 # Ventana principal de empleados
 @app.route('/empleados/')
@@ -370,7 +370,7 @@ def cargar_empleados_registro():
 
     return render_template('empleados_registro.html', colonias = colonias)
 
-# --------------------- ALUMNOS --------------------- ## --------------------- ALUMNOS --------------------- #
+# --------------------- ALUMNOS --------------------- ## --------------------- s_ALUMNOS --------------------- #
 
 # Ventana principal de alumnos
 @app.route('/alumnos/')
@@ -494,7 +494,34 @@ def cargar_alumnos_registro():
 
     return render_template('alumnos_registro.html', colonias = colonias, actividades = actividades)
 
-# --------------------- PROVEEDORES --------------------- ## --------------------- PROVEEDORES --------------------- #
+# --------------------- PROVEEDORES --------------------- ## --------------------- S_PROVEEDORES --------------------- #
+
+# Ventana principal de proveedores
+@app.route('/proveedores/')
+def cargar_proveedores():
+    query = "select * from proveedor"
+    cur.execute(query)
+    proveedores = cur.fetchall()
+
+    return render_template('proveedores.html', proveedores = proveedores)
+
+@app.route('/proveedor', methods=['POST'])
+def proveedor():
+    data = request.form
+
+    query = "select cve_prov, empresa_prov, concat(calle_prov, ' ', orient_prov, ' ', num_prov) as domicilio, tel_prov, cve_col from proveedor where cve_prov=" + data['clave']
+    cur.execute(query)
+    _proveedor = cur.fetchall()
+
+    proveedor = _proveedor[0]
+
+    tupla = {
+        "general": [
+            { "clave": proveedor[0], "empresa": proveedor[1], "domicilio": proveedor[2], "tel": proveedor[3], "col": proveedor[4] }
+        ]
+    }
+
+    return tupla
 
 @app.route('/proveedores/registrar', methods=['GET', 'POST'])
 def cargar_proveedores_registro():
@@ -515,7 +542,7 @@ def cargar_proveedores_registro():
         mydb.commit()
 
         print("INSERCION EXITOSA")
-        pass
+        return redirect(url_for('cargar_proveedores'))
 
     query = "select * from colonia"
     cur.execute(query)
@@ -523,12 +550,34 @@ def cargar_proveedores_registro():
 
     return render_template('proveedores_registro.html', colonias = colonias)
 
-# --------------------- MATERIALES --------------------- ## --------------------- MATERIALES --------------------- #
+# --------------------- MATERIALES --------------------- ## --------------------- S_MATERIALES --------------------- #
 
 # Ventana principal de materiales
 @app.route('/materiales/')
 def cargar_materiales():
-    return render_template('materiales.html')
+    query = "select * from material"
+    cur.execute(query)
+    materiales = cur.fetchall()
+    return render_template('materiales.html', materiales = materiales)
+
+@app.route('/material', methods=['POST'])
+def material():
+    data = request.form
+
+    query = "select m.*, a.nom_act from material m join actividad a on m.cve_act=a.cve_act where m.cve_mat=" + data['clave']
+    cur.execute(query)
+    _material = cur.fetchall()
+
+    material = _material[0]
+
+    tupla = {
+        "material": [
+            { "clave": material[0], "nombre": material[1], "marca": material[2], "precio": material[3], "descripcion": material[4],
+            "act": material[7]  }
+        ]
+    }
+
+    return tupla
 
 # /registro-materiales
 @app.route('/materiales/registrar', methods=['GET', 'POST'])
@@ -560,7 +609,7 @@ def cargar_materiales_registro():
 # TODO: Checar que sea correcta la ejecucion
 # /resurtido-materiales
 @app.route('/materiales/suministrar', methods=['GET', 'POST'])
-def cargar_materiales_resurtido():
+def cargar_materiales_resurtir():
     if request.method == "POST":
         detalles = request.form
         _material = detalles['material']
@@ -592,7 +641,66 @@ def cargar_materiales_resurtido():
 
     return render_template('materiales_resurtir.html', materiales = materiales, proveedores = proveedores, listaMateriales = listaMateriales)
 
-# --------------------- NOMINAS --------------------- #
+# --------------------- SOLICITUDES --------------------- ## --------------------- s_SOLICITUDES --------------------- #
+
+@app.route('/solicitudes/')
+def cargar_solicitudes():
+    return render_template('solicitudes.html')
+
+@app.route('/solicitudes/solicitar', methods=['POST','GET'])
+def cargar_materiales_solicitar():
+    if request.method == "POST":
+
+        detalles = request.form
+        _docente = detalles['docente']
+        _material = detalles['material']
+        _fechapres = detalles['fechapres']
+        _cantidad = detalles['cantidad']
+
+        query = "insert into prestamo values (%s, %s, %s, %s)"
+
+        consulta = "select p.curp_per from persona p join empleado e on p.curp_per = e.curp_per where cve_emp = %s and puesto = 'Docente' group by p.curp_per" %_docente
+        cur.execute(consulta)
+        resultado = cur.fetchall()
+
+        for registro in resultado:
+            _curp = registro[0]
+
+        values = (None, _fechapres, _curp, _docente)
+        cur.execute(query, values)
+        mydb.commit()
+        
+        query = "insert into renglonprestamo values (%s, %s, %s, %s)"
+        consulta = "select max(cve_pres) from prestamo"
+        cur.execute(consulta)
+        result = cur.fetchall()
+
+        for registro in result:
+            _prestamo = registro[0]
+
+        values = (None, _cantidad, _material, _prestamo)
+        cur.execute(query, values)
+        mydb.commit()
+
+        print("INSERCION EXITOSA")
+        pass
+
+    # query = "select e.cve_emp, concat(nom_per, ' ', ap_per, ' ', am_per) as nombre from persona p join empleado e where p.curp_per = e.curp_per and puesto='Docente'"
+    query = " select p.curp_per, concat(nom_per, ' ', ap_per, ' ', am_per), concat(calle_per, ' ', orient_per, ' ', numero_per), tel_per, concat(puesto, '') from persona p join empleado e on p.curp_per=e.curp_per"
+    cur.execute(query)
+    empleados = cur.fetchall()
+
+    query = "select p.curp_per, concat(nom_per, ' ', ap_per, ' ', am_per), concat(calle_per, ' ', orient_per, ' ', numero_per), tel_per from persona p join alumno a on p.curp_per=a.curp_per"
+    cur.execute(query)
+    alumnos = cur.fetchall()
+        
+    query = "select e.cve_mat,  nombre_mat from material m join entrada e where m.cve_mat = e.cve_mat and cantidad_ent >=1 group by nombre_mat"
+    cur.execute(query)
+    materiales = cur.fetchall()
+
+    return render_template('materiales_solicitar.html', empleados = empleados, alumnos = alumnos, materiales = materiales)
+
+# --------------------- NOMINAS --------------------- ## --------------------- s_NOMINAS --------------------- #
 
 @app.route('/nominas', methods=['GET', 'POST'])
 def cargar_nominas():
