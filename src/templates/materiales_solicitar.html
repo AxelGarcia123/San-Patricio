@@ -202,13 +202,12 @@
                                         <th data-sortable="true">Clave</th>
                                         <th data-sortable="true">Material</th>
                                         <th data-sortable="true">Marca</th>
-                                        <th data-sortable="true">Precio</th>
-                                        <th data-sortable="true">Descripción</th>
                                         <th data-sortable="true">Actividad</th>
+                                        <th data-sortable="true">Disponible</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for i in materiales %}
+                                    {% for i in materialesAux %}
                                         <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
                                             <td data-field="state" data-checkbox="true"></td>
                                             <td>{{ i[0] }}</td>
@@ -216,7 +215,6 @@
                                             <td>{{ i[2] }}</td>
                                             <td>{{ i[3] }}</td>
                                             <td>{{ i[4] }}</td>
-                                            <td>{{ i[7] }}</td>
                                         </tr>
                                     {% endfor %} 
                                 </tbody>

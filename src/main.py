@@ -380,11 +380,21 @@ def cargar_alumnos():
     inscritos = cur.fetchall()
 
     # query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from folio f join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per where not exists(select folio_fol, folio_insc from folio f, registroinscripcion ri where folio_fol=folio_insc)"
-    query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from folio f join registroinscripcion ri on f.folio_fol!=ri.folio_insc join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per"
+    # query = "select a.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per) from folio f join registroinscripcion ri on f.folio_fol!=ri.folio_insc join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per"
+    query = "select f.cve_alu, concat(nom_per, ' ', ap_per, ' ', am_per), folio_fol from folio f join alumno a on f.cve_alu=a.cve_alu join persona p on a.curp_per=p.curp_per where not exists(select folio_insc from registroInscripcion ri where ri.folio_insc=f.folio_fol)"
     cur.execute(query)
     noInscritos = cur.fetchall()
 
-    return render_template('alumnos.html', inscritos = inscritos, noInscritos = noInscritos)
+    # query = "select cve_gru, concat(horaent_gru, ' - ', horasali_gru), concat(fechaini_gru, ' a ', fechafin_gru), nom_act, nombre_are, concat(nom_per, " ", ap_per, " ", am_per) from grupo g join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru"
+    query = "select g.cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, count(folio_insc) as cuenta, maxalumnos_gru as maxalumnos from grupo g join registroInscripcion ri on g.cve_gru=ri.cve_gru join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru group by g.cve_gru having cuenta<=maxalumnos"
+    cur.execute(query)
+    gruposNoVacios = cur.fetchall()
+
+    query = "select g.cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, maxalumnos_gru from grupo g join registroInscripcion ri on g.cve_gru!=ri.cve_gru join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru"
+    cur.execute(query)
+    gruposVacios = cur.fetchall()
+
+    return render_template('alumnos.html', inscritos = inscritos, noInscritos = noInscritos, gruposNoVacios = gruposNoVacios, gruposVacios = gruposVacios)
 
 @app.route('/alumno', methods=['POST'])
 def alumno():
@@ -405,7 +415,11 @@ def alumno():
     cur.execute(query)
     folio = cur.fetchall()
 
-    # print("folio = ", folio)
+    # query = "select cve_gru, concat(horaent_gru, ' - ', horasali_gru), concat(fechaini_gru, ' a ', fechafin_gru) from grupo where curdate() between fechaini_gru and fechafin_gru"
+    # cur.execute(query)
+    # grupos = cur.fetchall()
+
+    print("folio = ", folio)
 
     tupla = {
         "alumno": [
@@ -417,16 +431,24 @@ def alumno():
         "folio": folio
     }
 
-    print(tupla)
+    # print(tupla)
     return tupla
 
 @app.route('/alumnoInscribir', methods=['POST'])
 def alumnoInscribir():
-    data = request.form
-    print("data = ", data)
+    detalles = request.form
+    _folio = detalles['folio']
+    _grupo = detalles['grupo']
+    _fecha = detalles['fecha']
+    _importe = detalles['importe']
 
-    query = "insert into registroinscripcion values(%s, %s, %s, %s, %s)"
-    values = (data['folio'], data['fecha'], data['importe'], data['importe'], data['grupo'])
+    # print("detalles = ", detalles)
+
+    query = "insert into registroInscripcion values(%s, %s, %s, %s, %s)"
+    values = (_folio, _fecha, _importe, _importe, _grupo)
+
+    # query = "insert into registroinscripcion values(%s, %s, %s, %s, %s)"
+    # values = (data['folio'], data['fecha'], data['importe'], data['importe'], data['grupo'])
 
     cur.execute(query, values)
     mydb.commit()
@@ -590,8 +612,8 @@ def cargar_materiales_registro():
         _actividad = detalles['actividad']
         _descripcion = detalles['descripcion']
 
-        query = "insert into material values (%s, %s, %s, %s, %s, %s)"
-        values = (None, _nombre, _marca, _precio, _descripcion, _actividad)
+        query = "insert into material values (%s, %s, %s, %s, %s, %s, %s)"
+        values = (None, _nombre, _marca, _precio, _descripcion, "Prestable", _actividad)
 
         cur.execute(query, values)
         mydb.commit()
@@ -694,11 +716,33 @@ def cargar_materiales_solicitar():
     cur.execute(query)
     alumnos = cur.fetchall()
         
-    query = "select e.cve_mat,  nombre_mat from material m join entrada e where m.cve_mat = e.cve_mat and cantidad_ent >=1 group by nombre_mat"
+    # query = "select e.cve_mat,  nombre_mat from material m join entrada e where m.cve_mat = e.cve_mat and cantidad_ent >=1 group by nombre_mat"
+    query = "select e.cve_mat, nombre_mat, marca_mat, nom_act from material m join entrada e join actividad a on m.cve_act=a.cve_act where m.cve_mat = e.cve_mat and cantidad_ent >=1 group by nombre_mat"
     cur.execute(query)
     materiales = cur.fetchall()
 
-    return render_template('materiales_solicitar.html', empleados = empleados, alumnos = alumnos, materiales = materiales)
+    materialesAux = []
+    for i in materiales:
+        datos = []
+        materialesAux.append(datos)
+        for j in i:
+            datos.append(j)
+
+        print('materialNombre = ', i[1])
+        cur.callproc('sp_materialdisponible', [i[1], ])
+        # listaDisp = cur.stored_results()
+        # disp = listaDisp[0].fetchall()
+        # print("disp = ", disp)
+        for resultado in cur.stored_results():
+            listaDisp = resultado.fetchall()
+            # print("disp = ", disp[0])
+            for k in listaDisp[0]:
+                datos.append(k)
+            # datos.append(resultado.fetchall())
+
+    print("materiales aux = ", materialesAux)
+
+    return render_template('materiales_solicitar.html', empleados = empleados, alumnos = alumnos, materialesAux = materialesAux)
 
 # --------------------- NOMINAS --------------------- ## --------------------- s_NOMINAS --------------------- #
 

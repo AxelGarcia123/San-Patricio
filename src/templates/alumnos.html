@@ -33,7 +33,7 @@
 
 {% block contenido %}
 
-<!-- TOAST -->
+<!-- TOAST FOLIO -->
 <div class="toast" id="toastFolio" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; bottom: 1rem; left: 1rem;" data-delay="5000">
     <div class="toast-header">
         <strong class="mr-auto">Folio</strong>
@@ -46,7 +46,22 @@
         El folio se ha generado con éxito.
     </div>
 </div>
-<!-- - TOAST - -->
+<!-- - TOAST FOLIO - -->
+
+<!-- TOAST INSCRIPCION -->
+<div class="toast" id="toastInsc" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; bottom: 1rem; left: 1rem;" data-delay="5000">
+    <div class="toast-header">
+        <strong class="mr-auto">Inscripcion</strong>
+        <small>Hace un momento</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Inscripcion de alumno realizada con éxito.
+    </div>
+</div>
+<!-- - TOAST INSCRIPCION - -->
 
 <div class="wrapper flex-grow-1"> 
 
@@ -380,6 +395,74 @@
                                 </div>
                             </div> -->
 
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="buscarGrupos" tabindex="-1" role="dialog" aria-labelledby="tituloGrupos" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="tituloGrupos">Grupos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table
+                                        id="tablaGrupos"
+                                        data-locale="es-MX"
+                                        data-toggle="table"
+                                        data-search="true"
+                                        data-single-select="true"
+                                        data-click-to-select="true"
+                                        data-pagination="true"
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="state" data-checkbox="true"></th>
+                                                    <th data-sortable="true">Clave</th>
+                                                    <th data-sortable="true">Turno</th>
+                                                    <th data-sortable="true">Periodo</th>
+                                                    <th data-sortable="true">Actividad</th>
+                                                    <th data-sortable="true">Área</th>
+                                                    <th data-sortable="true">Docente</th>
+                                                    <th data-sortable="true">Disponible</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in gruposVacios %}
+                                                    <tr id="tr-id-{{ loop.index }}" class="act{{ i[3] }} tr-class-{{ loop.index }}">
+                                                        <td data-field="state" data-checkbox="true"></td>
+                                                        <td>{{ i[0] }}</td>
+                                                        <td>{{ i[1] }}</td>
+                                                        <td>{{ i[2] }}</td>
+                                                        <td>{{ i[3] }}</td>
+                                                        <td>{{ i[4] }}</td>
+                                                        <td>{{ i[5] }}</td>
+                                                        <td>{{ i[6] }}</td>
+                                                    </tr>
+                                                {% endfor %} 
+                                                {% for i in gruposNoVacios %}
+                                                    <tr id="tr-id-{{ loop.index }}" class="act{{ i[3] }} tr-class-{{ loop.index }}">
+                                                        <td data-field="state" data-checkbox="true"></td>
+                                                        <td>{{ i[0] }}</td>
+                                                        <td>{{ i[1] }}</td>
+                                                        <td>{{ i[2] }}</td>
+                                                        <td>{{ i[3] }}</td>
+                                                        <td>{{ i[4] }}</td>
+                                                        <td>{{ i[5] }}</td>
+                                                        <td>{{ i[7] - i[6] }}</td>
+                                                    </tr>
+                                                {% endfor %} 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary" id="btnSeleccionarGrupo">Seleccionar</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
