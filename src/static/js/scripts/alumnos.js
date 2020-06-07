@@ -88,7 +88,7 @@ $('.btnMostrar').click(function() {
 
                                 html += "<div class='row'>"
                                     html += "<div class='col-md-12 d-flex justify-content-end'>"
-                                        html += "<button type='submit' class='mt-3 botones btn btn-lg mr-2 rounded-pill px-5' id='_btAceptar'>Inscribir</button>"
+                                        html += "<button type='submit' class='mt-3 btnEditar btn  rounded-pill px-5 font-weight-bold' id='_btAceptar'>Inscribir</button>"
                                     html += "</div>"
                                 html += "</div>"
 

@@ -29,8 +29,8 @@
         <div class="row ">
 
             <div class="col-md-4 mb-3">
-                <!-- <label for="nombre">Nombre(s)</label> -->
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre(s)" value="" maxlength="80" required>
+                <label for="nombre">Nombre(s)</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="" value="" maxlength="80" required autofocus>
         
                 <div class="invalid-feedback">
                     Ingrese un nombre válido.
@@ -38,8 +38,8 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="ap">Apellido paterno</label> -->
-                <input type="text" class="form-control" id="ap" name="ap" placeholder="Apellido paterno" value="" maxlength="80" required>
+                <label for="ap">Apellido paterno</label>
+                <input type="text" class="form-control" id="ap" name="ap" placeholder="" value="" maxlength="80" required>
         
                 <div class="invalid-feedback">
                     Ingrese un apellido válido.
@@ -47,8 +47,8 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="am">Apellido materno</label> -->
-                <input type="text" class="form-control" id="am" name="am" placeholder="Apellido materno" value="" maxlength="80" required>
+                <label for="am">Apellido materno</label>
+                <input type="text" class="form-control" id="am" name="am" placeholder="" value="" maxlength="80" required>
         
                 <div class="invalid-feedback">
                     Ingrese un apellido válido.
@@ -56,8 +56,8 @@
             </div>
 
             <div class="col-md-2 mb-3">
-                <!-- <label for="fechanac">Fecha de nacimiento</label> -->
-                <input type="date" class="form-control" id="fechanac" name="fechanac" placeholder="Fecha de nacimiento" value="" required>
+                <label for="fechanac">Fecha de nacimiento</label>
+                <input type="date" class="form-control" id="fechanac" name="fechanac" placeholder="" value="" required>
         
                 <div class="invalid-feedback">
                     Ingrese una fecha válida.
@@ -70,8 +70,8 @@
         <div class="row">
 
             <div class="col-md-4 mb-3">
-                <!-- <label for="tel">Teléfono</label> -->
-                <input type="number" class="form-control" id="tel" name="tel" placeholder="Teléfono" value="" required>
+                <label for="tel">Teléfono</label>
+                <input type="number" class="form-control" id="tel" name="tel" placeholder="" value="" required>
         
                 <div class="invalid-feedback">
                     Ingrese un número telefónico válido.
@@ -79,8 +79,8 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <!-- <label for="curp">CURP</label> -->
-                <input type="text" class="form-control" id="curp" name="curp" placeholder="CURP" value="" maxlength="18" required autofocus>
+                <label for="curp">CURP</label>
+                <input type="text" class="form-control" id="curp" name="curp" placeholder="" value="" maxlength="18" required>
         
                 <div class="invalid-feedback">
                     Ingrese una CURP válida.
@@ -88,9 +88,9 @@
             </div>
 
             <div class="col-md-2 mb-3">
-                <!-- <label for="genero">Género</label> -->
+                <label for="genero">Género</label>
                 <select class="custom-select d-block w-100" id="genero" name="genero" required>
-                    <option value="">Sexo...</option>
+                    <option value="">Elija...</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                 </select>
@@ -109,9 +109,9 @@
         <div class="row">
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="col">Colonia</label> -->
+                <label for="col">Colonia</label>
                 <select class="custom-select d-block w-100" id="col" name="col" required>
-                    <option value="">Colonia...</option>
+                    <option value="">Elija...</option>
                     {% for i in colonias %}
                         <option value="{{ i[0] }}">{{ i[1] }} - {{ i[2] }}</option>
                     {% endfor %}
@@ -123,8 +123,8 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="tel">Teléfono</label> -->
-                <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad" value="" required>
+                <label for="ciudad">Ciudad</label>
+                <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="" value="" required>
         
                 <div class="invalid-feedback">
                     Ingrese una ciudad válida.
@@ -132,8 +132,8 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="calle">Calle</label> -->
-                <input type="text" class="form-control" id="calle" name="calle" placeholder="Calle" value="" maxlength="80" required>
+                <label for="calle">Calle</label>
+                <input type="text" class="form-control" id="calle" name="calle" placeholder="" value="" maxlength="80" required>
         
                 <div class="invalid-feedback">
                     Ingrese una calle válida.
@@ -141,11 +141,11 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="num">Número de casa</label> -->
-                <input type="number" class="form-control" id="codpos" name="codpos" placeholder="Código Postal" value="" required>
+                <label for="num">Número de casa</label>
+                <input type="number" class="form-control" id="num" name="num" placeholder="" value="" required>
         
                 <div class="invalid-feedback">
-                    Ingrese un código postal válido.
+                    Ingrese un número válido.
                 </div>
             </div>
 
@@ -154,18 +154,9 @@
         <div class="row">
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="num">Número de casa</label> -->
-                <input type="number" class="form-control" id="num" name="num" placeholder="Número de casa" value="" required>
-        
-                <div class="invalid-feedback">
-                    Ingrese un número válido.
-                </div>
-            </div>
-
-            <div class="col-md-3 mb-3">
-                <!-- <label for="orient">Orientación</label> -->
+                <label for="orient">Orientación</label>
                 <select class="custom-select d-block w-100" id="orient" name="orient" required>
-                    <option value="">Orientación...</option>
+                    <option value="">Eija...</option>
                     <option value="Norte">Norte</option>
                     <option value="Sur">Sur</option>
                     <option value="Oriente">Oriente</option>
@@ -178,9 +169,18 @@
                 </div>
             </div>
 
+            <div class="col-md-3 mb-3">
+                <label for="codpos">Código Postal</label>
+                <input type="number" class="form-control" id="codpos" name="codpos" placeholder="" value="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un código postal válido.
+                </div>
+            </div>
+
             <div class="col-md-6 mb-3">
-                <!-- <label for="entrecalles">Entre calles</label> -->
-                <input type="text" class="form-control" id="entrecalles" name="entrecalles" placeholder="Entre calles" value="" maxlength="150">
+                <label for="entrecalles">Entre calles</label>
+                <input type="text" class="form-control" id="entrecalles" name="entrecalles" placeholder="" value="" maxlength="150">
         
                 <div class="invalid-feedback">
                     Ingrese una descripción válida.

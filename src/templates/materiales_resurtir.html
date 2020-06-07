@@ -29,9 +29,9 @@
         <div class="row">
 
             <div class="col-md-9 mb-3">
-                <!-- <label for="empleado">Docente</label> -->
+                <label for="material">Material</label>
                 <select class="custom-select d-block w-100" id="material" name="material" required>
-                    <option value="">Material...</option>
+                    <option value="">Elija...</option>
                     {% for i in materiales %}
                         <option value="{{ i[0] }}">{{ i[1] }}</option>
                     {% endfor %}
@@ -43,8 +43,8 @@
             </div>
 
             <!-- Button trigger modal -->
-            <div class="col-md-3 mb-3">
-                <button type="button" class="btn btn-primary w-100" name="buscarMaterial" id="buscarMaterial" data-toggle="modal" data-target="#buscarMateriales">Buscar material</button>
+            <div class="col-md-3 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100 " name="buscarMaterial" id="buscarMaterial" data-toggle="modal" data-target="#buscarMateriales">Buscar material</button>
             </div>
 
             <!-- Modal -->
@@ -106,9 +106,9 @@
         <div class="row">
 
             <div class="col-md-9 mb-3">
-                <!-- <label for="tipo">Tipo de área</label> -->
+                <label for="proveedor">Proveedor</label>
                 <select class="custom-select d-block w-100" id="proveedor" name="proveedor" required>
-                    <option value="">Proveedor...</option>
+                    <option value="">Elija...</option>
                     {% for i in proveedores %}
                         <option value="{{ i[0] }}">{{ i[1] }}</option>
                     {% endfor %}
@@ -120,7 +120,7 @@
             </div>
 
             <!-- Button trigger modal -->
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3 d-flex align-items-end justify-content-end">
                 <button type="button" class="btn btn-primary w-100" name="buscarProveedor" id="buscarProveedor" data-toggle="modal" data-target="#buscarProveedores">Buscar proveedor</button>
             </div>
 
@@ -179,8 +179,8 @@
         <div class="row">
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="nombre">Nombre</label> -->
-                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" value="" maxlength="" required>
+                <label for="cantidad">Cantidad resurtida</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="" value="" maxlength="" required>
         
                 <div class="invalid-feedback">
                     Ingrese una cantidad válida.
@@ -188,8 +188,8 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="nombre">Nombre</label> -->
-                <input type="number" class="form-control" id="ppu" name="ppu" placeholder="Precio por unidad" value="" maxlength="" required>
+                <label for="ppu">Precio por unidad</label>
+                <input type="number" class="form-control" id="ppu" name="ppu" placeholder="" value="" maxlength="" required>
         
                 <div class="invalid-feedback">
                     Ingrese un precio válido.
@@ -197,15 +197,15 @@
             </div>
 
             <div class="col-md-3 mb-3">
-                <!-- <label for="nombre">Nombre</label> -->
-                <input type="date" class="form-control" id="fechaent" name="fechaent" placeholder="Fecha de resurtido" value="" required>
+                <label for="fechaent">Fecha de resurtido</label>
+                <input type="date" class="form-control" id="fechaent" name="fechaent" placeholder="" value="" required>
         
                 <div class="invalid-feedback">
                     Seleccione una fecha válida.
                 </div>
             </div>
 
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3 d-flex align-items-end justify-content-end">
                 <button type="submit" class="botones btn w-100" name="agregar" id="agregar">Agregar</button>
             </div>
 

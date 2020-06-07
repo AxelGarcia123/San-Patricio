@@ -1,7 +1,9 @@
 var tablaEmpleados = $('#tablaEmpleados')
 var tablaAlumnos = $('#tablaAlumnos')
+var tablaMateriales = $('#tablaMateriales')
 
 var btnSeleccionarPersona = document.getElementById('btnSeleccionarPersona')
+var btnSeleccionarMaterial = document.getElementById('btnSeleccionarMaterial')
 
 $("#buscarPersona").click(() => { // Habilita o deshabilita el boton de seleccion al mostrar el modal
     let seleccionEmpleados = tablaEmpleados.bootstrapTable('getSelections')[0]
@@ -45,7 +47,7 @@ btnSeleccionarPersona.addEventListener('click', () => { // Selecciona la persona
     if (seleccionEmpleado != undefined)
         clave = seleccionEmpleado["1"]
     else
-        clave = seleccionAlumnos["1"]
+        clave = seleccionAlumno["1"]
 
     console.log(clave)
 
@@ -54,4 +56,34 @@ btnSeleccionarPersona.addEventListener('click', () => { // Selecciona la persona
     $("#persona").val(clave)
 
     $("#buscarPersonas").modal('hide')
+})
+
+////////////// MODAL DE MATERIALES //////////////
+
+$("#buscarMaterial").click(() => { // Habilita o deshabilita el boton de seleccion al mostrar el modal
+    let seleccionMateriales = tablaMateriales.bootstrapTable('getSelections')[0]
+
+    if (seleccionMateriales != undefined) 
+        $( "#btnSeleccionarMaterial" ).prop( "disabled", false )
+    else
+        $( "#btnSeleccionarMaterial" ).prop( "disabled", true )
+})
+
+$(tablaMateriales).on('click', 'tbody', () => { // Habilita o deshabilita el boton de seleccion dentro del modal
+    let seleccionMateriales = tablaMateriales.bootstrapTable('getSelections')[0]
+
+    if (seleccionMateriales != undefined) 
+        $( "#btnSeleccionarMaterial" ).prop( "disabled", false )
+    else    
+        $( "#btnSeleccionarMaterial" ).prop( "disabled", true )
+})
+
+btnSeleccionarMaterial.addEventListener('click', () => { // Selecciona el material en el select, cierra el modal
+    let seleccionMaterial = tablaMateriales.bootstrapTable('getSelections')[0]
+
+    var clave = seleccionMaterial["1"]
+
+    $("#material").val(clave)
+
+    $("#buscarMateriales").modal('hide')
 })

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block titulo %}{% endblock %} </title>
+    <title> {% block titulo %}Inicio{% endblock %} </title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/menu_responsive.css') }}">
@@ -31,7 +31,7 @@
     <!-- cabecera navbar navbar-expand-md navbar-dark fixed-top -->
     <nav class="cabecera navbar navbar-expand-md navbar-dark fixed-top">
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo de la empresa" class="logo">
-        <a class="navbar-brand ml-3 text-dark" href="{{ url_for('cargar_menu_responsive') }}">San Patricio</a>
+        <a class="navbar-brand ml-3 text-dark" href="{{ url_for('cargar_principal') }}">San Patricio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -94,6 +94,9 @@
                 <button class="d-inline boton button-profile">            
                     <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="foto_perfil" class="foto-perfil">
                 </button>
+                <button class="d-inline boton">
+                    <a href="/logout">Cerrar sesion</a>
+                </button>
             </div>
         </div>
     </nav>
@@ -112,6 +115,10 @@
           <li class="list-inline-item"><a href="#">Support</a></li>
         </ul> -->
     </footer>
+
+    {# {% if 'sesion' in session %}
+        <h1>El usuario es: {{ session['rol'] }}</h1>
+    {% endif %} #}
 
 </body>
 </html>

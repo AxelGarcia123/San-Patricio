@@ -1,35 +1,85 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect, url_for, json, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
-import json
+import os
 app = Flask(__name__)
+app.secret_key = os.urandom(16)
 
 mydb = mysql.connector.connect(
     host="localhost", ## Escribir aqui tu host (localhost por defecto)
     user="root", # Escribir aqui tu usuario
-    passwd="3_99SA.17*Pc#2", # Escribir aqui tu contraseña
+    passwd="tu_contrasena", # Escribir aqui tu contraseña
     database = "sanpatricio", # Escribir aqui el nombre de la base de datos
     auth_plugin='mysql_native_password' # Dejar esta propiedad asi
 )
 
 cur = mydb.cursor()
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+def cargar_principal():
+    if 'sesion' in session:
+        usuario = session['usuario']
+        print("LOGEADO COMO: ", usuario)
+        return render_template('menu_responsive.html')
+    return redirect(url_for('cargar_login'))
+
+@app.route('/login', methods=['GET', 'POST'])
 def cargar_login():
-    # if request.method == "POST":
-    #     detalles = request.form
-        # print(detalles)
-        # _username = detalles['username']
-        # _password = detalles['password']
-        # cur = mysql.get_db().cursor()
-        # cur.execute("select * from test")
-        # data = cur.fetchall()
-        # print(str(data))
-        # print(type(data))
-        # cur.close()
-        # return render_template('menu.html')
+    if 'sesion' in session:
+        return redirect(url_for('cargar_principal'))
+
+    if request.method == "POST":
+        detalles = request.form
+        _usuario = detalles['username']
+
+        query = "select exists(select user_usu from usuario where user_usu='" + _usuario + "')"
+        cur.execute(query)
+        existeUsuario = cur.fetchall()[0]
+
+        if not existeUsuario[0]:
+            return redirect(url_for('cargar_login'))
+
+        _contrasenia = detalles['password']
+
+        query = "select cve_usu from usuario where user_usu='" + _usuario + "'"
+        cur.execute(query)
+        claveUsuario = cur.fetchall()[0]
+
+        query = "select strcmp((select pass_usu from usuario where cve_usu=" + str(claveUsuario[0]) + "), sha2('" + str(_contrasenia) + "', 224))"
+        cur.execute(query)
+        contraseniaCorrecta = cur.fetchall()[0]
+
+        if contraseniaCorrecta[0] != 0:
+            return redirect(url_for('cargar_login'))
+
+        rol = "persona"
+
+        query = "select exists(select u.curp_per from usuario u join empleado e on u.curp_per=e.curp_per where u.cve_usu=" + str(claveUsuario[0]) + ")"
+        cur.execute(query)
+        esEmpleado = cur.fetchall()[0]
+
+        if esEmpleado[0]:
+            rol = "empleado"
+
+        query = "select exists(select u.curp_per from usuario u join alumno a on u.curp_per=a.curp_per where u.cve_usu=" + str(claveUsuario[0]) + ")"
+        cur.execute(query)
+        esAlumno = cur.fetchall()[0]
+
+        if esAlumno[0]:
+            rol = "alumno"
+
+        session['usuario'] = detalles['username']
+        session['rol'] = rol
+        session['sesion'] = True
+        return redirect(url_for('cargar_principal'))
     return render_template('Login.html')
+
+@app.route('/logout')
+def logout():
+   session.pop('usuario', None) 
+   session.pop('sesion', None) 
+   return redirect(url_for('cargar_login'))
 
 @app.route('/menu/')
 def cargar_menu():
@@ -117,8 +167,8 @@ def actividad():
     for i in actividad[2]:
         _tipo = i
 
-    # query = "select g.* from grupo g join actividad a on g.cve_act=a.cve_act where g.cve_act=" + data['clave']
-    query = "select g.*, a.nom_act, concat(p.nom_per, ' ', p.ap_per, ' ', p.am_per) from grupo g join actividad a on g.cve_act=a.cve_act join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_act=" + data['clave']
+    # query = "select g.*, a.nom_act, concat(p.nom_per, ' ', p.ap_per, ' ', p.am_per) from grupo g join actividad a on g.cve_act=a.cve_act join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_act=" + data['clave']
+    query = "select g.*, a.nombre_are, concat(p.nom_per, ' ', p.ap_per, ' ', p.am_per) from grupo g join area a on g.cve_are=a.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_act=" + data['clave']
     cur.execute(query)
     grupos = cur.fetchall()
 
@@ -126,12 +176,15 @@ def actividad():
 
     for grupo in grupos:
         grupo_dict = {
-            "horaent": str(grupo[1]),
-            "horasali": str(grupo[2]),
-            "fechaini": str(grupo[3]),
-            "fechafin": str(grupo[4]),
-            "maxalumnos": grupo[5],
-            "minalumnos": grupo[6],
+            "turno": str(grupo[1]) + " a " + str(grupo[2]),
+            # "horaent": str(grupo[1]),
+            # "horasali": str(grupo[2]),
+            "lapso": str(grupo[3]) + " - " + str(grupo[4]),
+            # "fechaini": str(grupo[3]),
+            # "fechafin": str(grupo[4]),
+            "minmaxalum": str(grupo[6]) + "/" + str(grupo[6]),
+            # "maxalumnos": grupo[5],
+            # "minalumnos": grupo[6],
             "are": grupo[10],
             "emp": grupo[11]
         }
@@ -219,6 +272,9 @@ def cargar_grupos_registro():
 # Ventana principal de empleados
 @app.route('/empleados/')
 def cargar_empleados():
+    if 'sesion' not in session:
+        return redirect(url_for('cargar_login'))
+
     queryAux = "select cve_emp, puesto, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto="
     
     query = queryAux + "'Administrador' order by nombre"
@@ -294,10 +350,6 @@ def empleado():
         }
         gruposDict.append(grupoDict)
 
-    # x = json.dumps(grupos, indent=4, sort_keys=True, default=str) # Esto no funciona -_-
-    # xX = json.loads(x) # Que perdida de tiempo e.e
-    # gG = Convert(xX)
-
     tupla = { 
         "laborales": [
             { "clave": datosEmpleado[0], "rfc": datosEmpleado[1], "fechain": datosEmpleado[2], "fechafin": datosEmpleado[3], "puesto": _puesto }
@@ -317,16 +369,16 @@ def empleado():
 
     return tupla
 
-@app.route('/signUp')
-def signUp():
-    return render_template('signUp.html')
+# @app.route('/signUp')
+# def signUp():
+#     return render_template('signUp.html')
 
-@app.route('/signUpUser', methods=['POST'])
-def signUpUser():
-    print(request.form)
-    user =  request.form['username']
-    password = request.form['password']
-    return json.dumps({'status':'OK','user':user,'pass':password})
+# @app.route('/signUpUser', methods=['POST'])
+# def signUpUser():
+#     print(request.form)
+#     user =  request.form['username']
+#     password = request.form['password']
+#     return json.dumps({'status':'OK','user':user,'pass':password})
 
 # Registro de empleados
 @app.route('/empleados/registrar', methods=['GET', 'POST'])
@@ -390,7 +442,10 @@ def cargar_alumnos():
     cur.execute(query)
     gruposNoVacios = cur.fetchall()
 
-    query = "select g.cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, maxalumnos_gru from grupo g join registroInscripcion ri on g.cve_gru!=ri.cve_gru join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru"
+    # select cve_gru from grupo where cve_gru not in (select cve_gru from registroinscripcion) AGREGA ESTOOOOOOOOOOOOOOOOOOOOOOOO
+    # select cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, maxalumnos_gru from grupo g join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_gru not in (select cve_gru from registroinscripcion)
+    # query = "select g.cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, maxalumnos_gru from grupo g join registroInscripcion ri on g.cve_gru!=ri.cve_gru join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where curdate() between fechaini_gru and fechafin_gru"
+    query = "select cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' a ', fechafin_gru) as periodo, nom_act, nombre_are, concat(nom_per, ' ', ap_per, ' ', am_per) as docente, maxalumnos_gru from grupo g join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_gru not in (select cve_gru from registroinscripcion)"
     cur.execute(query)
     gruposVacios = cur.fetchall()
 
@@ -628,7 +683,6 @@ def cargar_materiales_registro():
 
     return render_template('materiales_registro.html', actividades = actividades)
 
-# TODO: Checar que sea correcta la ejecucion
 # /resurtido-materiales
 @app.route('/materiales/suministrar', methods=['GET', 'POST'])
 def cargar_materiales_resurtir():
