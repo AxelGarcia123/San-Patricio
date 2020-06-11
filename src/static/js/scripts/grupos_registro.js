@@ -46,3 +46,35 @@ fechaInicial.addEventListener('change', () => {
 })
 
 // FIN --- LIMITAR FECHAS
+
+////////////////////// CONTROL DE BUSQUEDA Y SELECCION DE MATERIAL //////////////////////
+
+var tablaDocentes = $('#tablaDocentes')
+var btnSeleccionarDocente = document.getElementById('btnSeleccionarDocente')
+
+$("#buscarDocente").click(() => { // Habilita o deshabilita el boton de seleccion al mostrar el modal
+  let seleccion = tablaDocentes.bootstrapTable('getSelections')[0]
+
+  if (seleccion != undefined) 
+      $( "#btnSeleccionarDocente" ).prop( "disabled", false )
+  else
+      $( "#btnSeleccionarDocente" ).prop( "disabled", true )
+})
+
+$(tablaDocentes).on('click', 'tbody', () => { // Habilita o deshabilita el boton de seleccion dentro del modal
+  let seleccion = tablaDocentes.bootstrapTable('getSelections')[0]
+
+  if (seleccion != undefined) 
+      $( "#btnSeleccionarDocente" ).prop( "disabled", false )
+  else    
+      $( "#btnSeleccionarDocente" ).prop( "disabled", true )
+})
+
+btnSeleccionarDocente.addEventListener('click', () => { // Selecciona el material en el select, cierra el modal
+  let seleccion = tablaDocentes.bootstrapTable('getSelections')[0]
+  let clave = seleccion["1"]
+
+  $("#empleado").val(clave)
+
+  $("#buscarDocentes").modal('hide')
+})

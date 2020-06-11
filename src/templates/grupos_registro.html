@@ -14,6 +14,8 @@
     }
 </style>
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
 {% endblock %}
 
 {% block contenido %}
@@ -30,7 +32,6 @@
                 <label for="actividad">Actividad</label>
                 <select class="custom-select d-block w-100" id="actividad" name="actividad" required>
                     <option value="">Elige...</option>
-                    <!-- <option value="Deportiva">Deportiva</option> -->
                     {% for i in actividades %}
                         <option value="{{ i[0] }}">{{ i[1] }}</option>
                     {% endfor %}
@@ -45,7 +46,6 @@
                 <label for="area">Área</label>
                 <select class="custom-select d-block w-100" id="area" name="area" required>
                     <option value="">Elige...</option>
-                    <!-- <option value="Deportiva">Deportiva</option> -->
                     {% for i in areas %}
                         <option value="{{ i[0] }}">{{ i[1] }}</option>
                     {% endfor %}
@@ -119,14 +119,13 @@
         <div class="row">
 
             <div class="col-md-9 mb-3">
-                <!-- <label for="empleado">Docente</label> -->
+                <label for="empleado">Docente</label>
                 <select class="custom-select d-block w-100" id="empleado" name="empleado" required>
-                    <option value="">Docente...</option>
+                    <option value="">Elija...</option>
                     <!-- <option value="Deportiva">Deportiva</option> -->
                     {% for i in empleados %}
-                        <option value="{{ i[0] }}">{{ i[1] }}</option>
+                        <option value="{{ i[0] }}">{{ i[3] }}</option>
                     {% endfor %}
-                    <!-- <option value="">Saul Andre Aguilar Gutierrez</option> -->
                 </select>
         
                 <div class="invalid-feedback">
@@ -134,12 +133,61 @@
                 </div>
             </div>
 
-            <div class="col-md-3 mb-3">
-                <button type="button" class="btn btn-primary w-100" name="buscar" id="buscar">Buscar docente</button>
+            <!-- Button trigger modal -->
+            <div class="col-md-3 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100" name="buscarDocente" id="buscarDocente" data-toggle="modal" data-target="#buscarDocentes">Buscar docente</button>
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="buscarDocentes" tabindex="-1" role="dialog" aria-labelledby="tituloDocentes" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloDocentes">Docentes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table
+                            id="tablaDocentes"
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">Docente</th>
+                                        <th data-sortable="true">Contrato</th>
+                                        <th data-sortable="true">RFC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in empleados %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarDocente">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- <button class="btn btn-primary">Buscar docente</button> -->
         </div>
 
         <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
@@ -154,5 +202,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/scripts/grupos_registro.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
 
 {% endblock %}

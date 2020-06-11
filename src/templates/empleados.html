@@ -223,7 +223,7 @@
                         <button class="btn btnSeccion" value="datosLaborales">Datos laborales</button>
                         <button class="btn btnSeccion" value="datosActividades" id="_datosActividades" hidden>Actividades</button>
                         <button class="btn btnSeccion" value="datosGrupos" id="_datosGrupos" hidden>Grupos</button>
-                        <button class="btn btnSeccion">Horarios</button>
+                        <button class="btn btnSeccion" value="datosHorarios">Horarios</button>
                     </div>
                 </div>
 
@@ -448,36 +448,48 @@
                                     </table>
 
                                 </div>
-
-
-                                <!-- <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">RFC</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="rfc"></h5></div></div>
-                                </div> -->
                             </div>
 
                             <hr>
 
-                            <!-- <div class="row">
+                        </div>
+
+                    </div>
+
+                    <!-- SECCION DE HORARIOS -->
+                    <div class="col-md-8" id="datosHorarios" hidden>
+
+                        <div class="container">
+
+                            <div class="row">
                                 <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Puesto</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
-                                        </div>
+
+                                    <div class="toolbar" id="toolbarHorario">
+                                        <h5 class="font-weight-bold">Horario</h5>
                                     </div>
+                            
+                                    <table
+                                    id="tablaHorarios"
+                                    class=""
+                                    data-toolbar="#toolbarHorario"
+                                    data-locale="es-MX"
+                                    data-toggle="table"
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th data-sortable="true" data-field="dia">Día</th>
+                                                <th data-sortable="true" data-field="horaent">Hora de entrada</th>
+                                                <th data-sortable="true" data-field="horasal">Hora de salida</th>
+                                            </tr>
+                                        </thead>
+                                        <!-- <tbody id="tablaActivos">     
+                                        </tbody> -->
+                                    </table>
+
                                 </div>
-                                
-                                <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="puestoL"></h5></div></div>
-                                </div>
-                            </div> -->
+                            </div>
+
+                            <hr>
 
                         </div>
 

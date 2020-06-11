@@ -48,16 +48,16 @@
                     <a class="nav-link text-dark" href="/actividades/">Actividades</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Grupos</a>
+                    <a class="nav-link text-dark" href="/grupos/">Grupos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Áreas</a>
+                    <a class="nav-link text-dark" href="/areas/">Áreas</a>
                 </li>
                 <li class="nav-item">
                     <!-- <a class="nav-link text-dark" href="/materiales/">Materiales</a> -->
 
                     <div class="dropdown">
-                        <a class="nav-link text-dark dropdown-toggle" href="#" role="button" id="dropdownMenuMateriales" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link text-dark dropdown-toggle" href="" role="button" id="dropdownMenuMateriales" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Materiales
                         </a>
 
@@ -102,8 +102,9 @@
     </nav>
 
     <script src="{{ url_for('static', filename='/js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/bootstrap/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='/js/bootstrap/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='/js/bootstrap/bootstrap.bundle.js') }}"></script>
+    {#<script src="{{ url_for('static', filename='/js/bootstrap/bootstrap.bundle.js') }}"></script>#}
 
     {% block contenido %}{% endblock %}
 

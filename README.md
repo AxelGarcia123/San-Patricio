@@ -85,7 +85,7 @@ o
 - [X] Evitar el ingreso a URL's directas sin antes haber iniciado sesión (crear sesiones).
 - [ ] Hacer la ventana de Login responsiva.
 - [X] Hacer funcional el menu_responsive. No tiene referencias hacia ninguna página.
-- [ ] Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css. Esto debido a que no sé cómo importar desde web a Flask con url_for, y ni siquiera sé si lo permite el framework.
+- [ ] Descargar la fuente "Roboto" y agregarla como archivo local para determinarla como fuente por defecto, en lugar de importarla desde Google Fonts en el archivo Login.css.
 - [X] Cambiar el registro de alumnos y empleados. Crear un bloque en personas_registro.html para luego extender y agregar el contenido necesario. 
 - [ ] Mejorar la responsividad de los botones de Guardar y Cancelar en los formularios.
 - [ ] Formatear fechas salidas de MySQL.
@@ -93,8 +93,8 @@ o
 - [ ] Terminar solicitudes de préstamos y devoluciones.
 - [ ] Crear pantallas de reportes.
 - [X] Crear pantallas de materiales.
-- [ ] Crear pantallas de grupos.
-- [ ] Crear pantallas de áreas.
+- [X] Crear pantallas de grupos.
+- [X] Crear pantallas de áreas.
 
 ### Cambios importantes
 * Se agregaron algunas notas e instrucciones para ejecutar el servidor.

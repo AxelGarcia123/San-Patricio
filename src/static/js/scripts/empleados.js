@@ -52,6 +52,10 @@ $('.btnMostrarEmpleado').click(function() {
                 document.getElementById('_datosGrupos').setAttribute('hidden', 'true')
             }
 
+            // Datos de la seccion de horarios
+
+            $("#tablaHorarios").bootstrapTable('load', response.horarios)
+
         },
         error: function(error) {
             console.log(error);

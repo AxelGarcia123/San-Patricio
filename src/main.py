@@ -9,7 +9,7 @@ app.secret_key = os.urandom(16)
 mydb = mysql.connector.connect(
     host="localhost", ## Escribir aqui tu host (localhost por defecto)
     user="root", # Escribir aqui tu usuario
-    passwd="tu_contrasena", # Escribir aqui tu contraseña
+    passwd="3_99SA.17*Pc#2", # Escribir aqui tu contraseña
     database = "sanpatricio", # Escribir aqui el nombre de la base de datos
     auth_plugin='mysql_native_password' # Dejar esta propiedad asi
 )
@@ -20,7 +20,7 @@ cur = mydb.cursor()
 def cargar_principal():
     if 'sesion' in session:
         usuario = session['usuario']
-        print("LOGEADO COMO: ", usuario)
+        print("LOGIN: ", usuario)
         return render_template('menu_responsive.html')
     return redirect(url_for('cargar_login'))
 
@@ -94,7 +94,50 @@ def cargar_menu_responsive():
 
 @app.route('/areas/')
 def cargar_areas():
-    return render_template('areas.html')
+    query = "select a.cve_are, nombre_are from area a join grupo g on a.cve_are=g.cve_are where curdate() between fechaini_gru and fechafin_gru group by cve_are"
+    cur.execute(query)
+    areasOcupadas = cur.fetchall()
+
+    query = "select a.cve_are, nombre_are from area a join grupo g on a.cve_are=g.cve_are where curdate() not between fechaini_gru and fechafin_gru group by cve_are"
+    cur.execute(query)
+    areasLibres = cur.fetchall()
+
+    return render_template('areas.html', areasOcupadas = areasOcupadas, areasLibres = areasLibres)
+
+@app.route('/area', methods=['POST'])
+def area():
+    data = request.form
+
+    query = "select cve_are, nombre_are, concat(tipo_are, '') as tipo, concat(ancho_are, ' x ', largo_are, ' ', umedida_are) as medidas, detalles_are from area where cve_are=" + str(data['clave'])
+    cur.execute(query)
+    resultados = cur.fetchall()
+
+    area = resultados[0]
+
+    query = "select g.*, a.nom_act, concat(p.nom_per, ' ', p.ap_per, ' ', p.am_per) from grupo g join actividad a on g.cve_act=a.cve_act join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where g.cve_are=" + data['clave']
+    cur.execute(query)
+    grupos = cur.fetchall()
+
+    grupos_dict = []
+
+    for grupo in grupos:
+        grupo_dict = {
+            "turno": str(grupo[1]) + " a " + str(grupo[2]),
+            "lapso": str(grupo[3]) + " - " + str(grupo[4]),
+            "minmaxalum": str(grupo[6]) + "/" + str(grupo[5]),
+            "act": grupo[10],
+            "emp": grupo[11]
+        }
+        grupos_dict.append(grupo_dict)
+
+    tupla = {
+        "area": [
+            { "clave": area[0], "nombre": area[1], "tipo": area[2], "medidas": area[3], "detalles": area[4] }
+        ],
+        "grupos": grupos_dict
+    }
+
+    return tupla
 
 # /registro-areas
 @app.route('/areas/registrar', methods=['GET', 'POST'])
@@ -182,7 +225,7 @@ def actividad():
             "lapso": str(grupo[3]) + " - " + str(grupo[4]),
             # "fechaini": str(grupo[3]),
             # "fechafin": str(grupo[4]),
-            "minmaxalum": str(grupo[6]) + "/" + str(grupo[6]),
+            "minmaxalum": str(grupo[6]) + "/" + str(grupo[5]),
             # "maxalumnos": grupo[5],
             # "minalumnos": grupo[6],
             "are": grupo[10],
@@ -222,9 +265,60 @@ def cargar_actividades_registro():
 # --------------------- GRUPOS --------------------- ## --------------------- s_GRUPOS --------------------- #
 
 # Ventana principal de grupos
-# @app.route('/grupos/')
-# def cargar_grupos():
-#     return render_template('grupos.html')
+@app.route('/grupos/')
+def cargar_grupos():
+    query = "select cve_gru, nom_act from grupo g join actividad a on g.cve_act=a.cve_act where curdate() between fechaini_gru and fechafin_gru"
+    cur.execute(query)
+    gruposActivos = cur.fetchall()
+
+    query = "select cve_gru, nom_act from grupo g join actividad a on g.cve_act=a.cve_act where curdate() not between fechaini_gru and fechafin_gru"
+    cur.execute(query)
+    gruposInactivos = cur.fetchall()
+
+    return render_template('grupos.html', gruposActivos = gruposActivos, gruposInactivos = gruposInactivos)
+
+@app.route('/grupo', methods=['POST'])
+def grupo():
+    data = request.form
+
+    query = "select cve_gru, concat(horaent_gru, ' - ', horasali_gru) as turno, concat(fechaini_gru, ' / ', fechafin_gru) as periodo, concat(minalumnos_gru, '/', maxalumnos_gru) as minmax, concat(nom_act, ' - ', tipo_act) as actividad, concat(nombre_are, ' - ', tipo_are) as area, concat(nom_per, ' ', ap_per, ' ', am_per) as docente from grupo g join actividad a on g.cve_act=a.cve_act join area ar on g.cve_are=ar.cve_are join empleado e on g.cve_emp=e.cve_emp join persona p on e.curp_per=p.curp_per where cve_gru=" + data['clave']
+    cur.execute(query)
+    resultados = cur.fetchall()
+
+    grupo = resultados[0]
+
+    cur.callproc('sp_getListaGrupo', [ data['clave'], ])
+
+    alumnos = []
+
+    for resultado in cur.stored_results():
+        listaAlumnos = resultado.fetchall()
+        # if (listaAlumnos):
+        #     alumnos = listaAlumnos
+
+        for alumno in listaAlumnos:
+            alumno_dict = {
+                "curp": alumno[0],
+                "nombre": alumno[1]
+            }
+            alumnos.append(alumno_dict)
+
+        # print(listaAlumnos)
+        # for alumno in listaAlumnos:
+        #     print(alumno)
+
+    # print(alumnos)
+
+    # print(alumnos)
+
+    tupla = {
+        "grupo": [
+            { "clave": grupo[0], "turno": grupo[1], "periodo": grupo[2], "minmax": grupo[3], "act": grupo[4], "are": grupo[5], "docente": grupo[6] }
+        ],
+        "alumnos": alumnos
+    }
+
+    return tupla
 
 #/registro-grupos
 @app.route('/grupos/registrar', methods=['GET', 'POST'])
@@ -238,7 +332,7 @@ def cargar_grupos_registro():
         cur.execute(query)
         areas = cur.fetchall()
 
-        query = "select cve_emp, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto='Docente'"  
+        query = "select cve_emp, rfc_emp, concat(fechain_emp, ' / ', fechafin_emp), concat(nom_per, ' ', ap_per, ' ', am_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto='Docente' and curdate() between fechain_emp and fechafin_emp"  
         cur.execute(query)
         empleados = cur.fetchall()
 
@@ -272,8 +366,8 @@ def cargar_grupos_registro():
 # Ventana principal de empleados
 @app.route('/empleados/')
 def cargar_empleados():
-    if 'sesion' not in session:
-        return redirect(url_for('cargar_login'))
+    # if 'sesion' not in session:
+    #     return redirect(url_for('cargar_login'))
 
     queryAux = "select cve_emp, puesto, concat(ap_per, ' ', am_per, ' ', nom_per) as nombre from empleado e join persona p on e.curp_per=p.curp_per where puesto="
     
@@ -350,16 +444,30 @@ def empleado():
         }
         gruposDict.append(grupoDict)
 
+    query = "select dia_diahor, horaent_diahor, horasal_diahor from diahora dh join horario h on dh.cve_hor=h.cve_hor where cve_emp=" + str(datosEmpleado[0])
+    cur.execute(query)
+    horarios = cur.fetchall()
+
+    horariosDict = []
+    for horario in horarios:
+        horarioDict = {
+            "dia": entero_a_dia(horario[0]),
+            "horaent": str(horario[1]),
+            "horasal": str(horario[2])
+        }
+        horariosDict.append(horarioDict)
+
     tupla = { 
         "laborales": [
-            { "clave": datosEmpleado[0], "rfc": datosEmpleado[1], "fechain": datosEmpleado[2], "fechafin": datosEmpleado[3], "puesto": _puesto }
+            { "clave": datosEmpleado[0], "rfc": datosEmpleado[1], "fechain": str(datosEmpleado[2]), "fechafin": str(datosEmpleado[3]), "puesto": _puesto }
         ],
         "personales": [
             { "curp": datosEmpleado[5], "nombre": datosEmpleado[7] + " " + datosEmpleado[8] + " " + datosEmpleado[9], "tel": datosEmpleado[10],
-            "fechanac": datosEmpleado[11], "genero": _genero, 
+            "fechanac": str(datosEmpleado[11]), "genero": _genero, 
             "domicilio": datosEmpleado[13] + " " + _orient + " " + str(datosEmpleado[14]) }
         ],
-        "grupos": gruposDict
+        "grupos": gruposDict,
+        "horarios": horariosDict
     }
 
     # print(tupla)
@@ -412,7 +520,39 @@ def cargar_empleados_registro():
         values = (None, _rfc, _fechain, _fechafin, _puesto, _curp)
 
         cur.execute(query, values)
+        # mydb.commit()
+
+        # detalles = request.form
+        # print(detalles)
+
+        query = "insert into horario values(null, curdate(), (select max(cve_emp) from empleado))"
+        cur.execute(query)
+
+        dias = detalles.getlist('dia')
+        hsinicio = detalles.getlist('hinicio')
+        hsfinal = detalles.getlist('hfinal')
+
+        # print(dias)
+        # print(hsinicio)
+        # print(hsfinal)
+
+        if detalles['horario'] == "Fijo":
+            for i in range(len(dias)):
+                print("%s (%s) - %s - %s" % ( dias[i], dia_a_entero(dias[i]), hsinicio[0], hsfinal[0] ))
+                query = "insert into diahora values(%s, %s, %s, %s, (select max(cve_hor) from horario))"
+                values = ( None, dia_a_entero(dias[i]), hsinicio[0], hsfinal[0] )
+                cur.execute(query, values)
+        else:
+            for i in range(len(dias)):
+                print(dias[i], "(", dia_a_entero(dias[i]), ") - ", hsinicio[i], " - ", hsfinal[i])
+                # query = "insert into "
+
+
         mydb.commit()
+
+        print("INSERION EXITOSA")
+
+
         return redirect(url_for('cargar_empleados'))
         # pass
 
@@ -421,6 +561,38 @@ def cargar_empleados_registro():
     colonias = cur.fetchall()
 
     return render_template('empleados_registro.html', colonias = colonias)
+
+def dia_a_entero(dia):
+    if dia == "Lunes":
+        return 1
+    elif dia == "Martes":
+        return 2
+    elif dia == "Miercoles":
+        return 3
+    elif dia == "Jueves":
+        return 4
+    elif dia == "Viernes":
+        return 5
+    elif dia == "Sabado":
+        return 6
+    elif dia == "Domingo":
+        return 7
+
+def entero_a_dia(n):
+    if n == 1:
+        return "Lunes"
+    if n == 2:
+        return "Martes"
+    if n == 3:
+        return "Miércoles"
+    if n == 4:
+        return "Jueves"
+    if n == 5:
+        return "Viernes"
+    if n == 6:
+        return "Sábado"
+    if n == 7:
+        return "Domingo"
 
 # --------------------- ALUMNOS --------------------- ## --------------------- s_ALUMNOS --------------------- #
 
@@ -820,9 +992,27 @@ def cargar_nominas():
 
     return render_template('nominas.html')
 
-# @app.route('/test', methods=['GET', 'POST'])
-# def test():
-#     if request.method == "POST":
-#         detalles = request.form
-#         print(detalles)
-#     return render_template('test.html')
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    if request.method == "POST":
+        # detalles = request.form
+        # print(detalles)
+
+        # dias = detalles.getlist('dia')
+        # hsinicio = detalles.getlist('hinicio')
+        # hsfinal = detalles.getlist('hfinal')
+
+        # print(dias)
+        # print(hsinicio)
+        # print(hsfinal)
+
+        # for i in range(len(dias)):
+        #     print(dias[i], " - ", hsinicio[i], " - ", hsfinal[i])
+
+        query = "insert into test values(null, (select max(cve_emp) from empleado), now())"
+        # values = (None, "wea")
+
+        cur.execute(query)
+        mydb.commit()
+
+    return render_template('test.html')
