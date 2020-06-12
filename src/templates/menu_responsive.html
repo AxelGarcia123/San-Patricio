@@ -38,8 +38,6 @@
         
         <div class="collapse navbar-collapse ml-5" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-
-            {% if session['rol'] == 'empleado' and session['rolEmpleado'] == 'Docente' %}
                 
                 <li class="nav-item active">
                     <a class="nav-link text-dark" href="/empleados/">Empleados <span class="sr-only">(current)</span></a>
@@ -82,20 +80,6 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="/reportes/">Reportes</a>
                 </li>
-
-            {% elif session['rol'] == 'empleado' and session['rolEmpleado'] == 'Docente' %}
-
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/datos-personales">Datos personales</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/alumnos/">Datos laborales</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/alumnos/">Grupos</a>
-                </li>
-
-            {% endif %}
                 
             </ul>
 

@@ -1130,25 +1130,26 @@ def cargar_materiales_prestar():
 
 @app.route('/nominas/')
 def cargar_nominas():
-    # if request.method == "POST":
-    #     detalles = request.form
-    #     _fecha = detalles['fecha']
-    #     _monto = detalles['monto']
-    #     _modo = detalles['modo']
-    #     _empleado = detalles['empleado']
+    query = "select cve_retri, fecha_retri from retribucionempleado group by fecha_retri"
+    cur.execute(query)
+    nominas = cur.fetchall()
 
-    #     query = "insert into pagoempleado values (%s, %s, %s, %s, %s)"
-    #     values = (None, _fecha, _monto, _modo, _empleado)
+    return render_template('nominas.html', nominas = nominas)
 
-    #     cur.execute(query, values)
-    #     mydb.commit()
+@app.route('/nomina', methods=['POST'])
+def nomina():
+    cur.callproc('sp_pagoTrabajadores')
 
-    #     print("INSERCION EXITOSA")
-        # pass
+    for resultado in cur.stored_results():
+        lista = resultado.fetchall()
+        
+        for i in lista:
+            query = "insert into retribucionempleado values(%s, now(), %s, %s)"
+            values = (None, i[0], i[2])
+            cur.execute(query, values)
 
-    # query = ""
-
-    return render_template('nominas.html')
+    mydb.commit()
+    return "OK"
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
