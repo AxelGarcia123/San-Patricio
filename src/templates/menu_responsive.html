@@ -38,6 +38,9 @@
         
         <div class="collapse navbar-collapse ml-5" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
+
+            {% if session['rol'] == 'empleado' and session['rolEmpleado'] == 'Docente' %}
+                
                 <li class="nav-item active">
                     <a class="nav-link text-dark" href="/empleados/">Empleados <span class="sr-only">(current)</span></a>
                 </li>
@@ -65,7 +68,7 @@
                             <a class="dropdown-item" href="/materiales/">Materiales</a>
                             <a class="dropdown-item" href="/proveedores/">Proveedores</a>
                             <a class="dropdown-item" href="/solicitudes/">Solicitudes</a>
-                            <a class="dropdown-item" href="#">Préstamos</a>
+                            <a class="dropdown-item" href="/prestamos/">Préstamos</a>
                         </div>
                     </div>
 
@@ -74,11 +77,25 @@
                     <a class="nav-link text-dark" href="#">Horarios</a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="/nominas">Nóminas</a>
+                    <a class="nav-link text-dark" href="/nominas/">Nóminas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Reportes</a>
+                    <a class="nav-link text-dark" href="/reportes/">Reportes</a>
                 </li>
+
+            {% elif session['rol'] == 'empleado' and session['rolEmpleado'] == 'Docente' %}
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/datos-personales">Datos personales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/alumnos/">Datos laborales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/alumnos/">Grupos</a>
+                </li>
+
+            {% endif %}
                 
             </ul>
 

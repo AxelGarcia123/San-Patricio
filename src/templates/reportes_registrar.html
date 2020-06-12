@@ -1,0 +1,156 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Registrar reporte{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
+{% endblock %}
+
+{% block contenido %}
+<!-- REGISTRO DE AREAS -->
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Registrar reporte</h3>
+
+    <form class="needs-validation"  action="" method="POST">
+        <div class="row ">
+
+            <div class="col-md-9 mb-3">
+                <label for="material">Material</label>
+                <select class="custom-select d-block w-100" id="material" name="material" required>
+                    <option value="">Elija...</option>
+                    {% for i in materiales %}
+                        <option value="{{ i[0] }}">{{ i[1] }}</option>
+                    {% endfor %}
+                </select>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-3 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100 " name="buscarMaterial" id="buscarMaterial" data-toggle="modal" data-target="#buscarMateriales">Buscar material</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarMateriales" tabindex="-1" role="dialog" aria-labelledby="tituloMateriales" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloMateriales">Materiales</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table
+                            id="tablaMateriales"
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">Material</th>
+                                        <th data-sortable="true">Marca</th>
+                                        <th data-sortable="true">Precio</th>
+                                        <th data-sortable="true">Descripción</th>
+                                        <th data-sortable="true">Actividad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in materiales %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>{{ i[4] }}</td>
+                                            <td>{{ i[7] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarMaterial">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label for="cantidad">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="" value="" min="1" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un número válido.
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="fecha">Fecha</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" placeholder="" value="" required>
+        
+                <div class="invalid-feedback">
+                    Ingrese un número válido.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 mb-3">
+                <label for="causa">Causa</label>
+                <textarea class="form-control" id="causa" name="causa" rows="2" maxlength="555" placeholder=""></textarea>
+        
+                <div class="invalid-feedback">
+                    Ingrese una descripción válida.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TODO: HACER ESTO RESPONSIVO, MEJORARLO -->
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 190px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/scripts/reportes_registrar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
+
+{% endblock %}

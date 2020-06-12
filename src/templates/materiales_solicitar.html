@@ -24,12 +24,12 @@
 
     <h3 class="mx-auto mb-4">Solicitar material</h3>
 
-    <form class="needs-validation"  action="" method="POST">
+    <form class="needs-validation"  action="" method="POST" id="formulario">
         <div class="row ">
 
             <div class="col-md-8 mb-3">
                 <label for="persona">Solicitante</label>
-                <input type="text" class="form-control" id="persona" name="persona" placeholder="" value="" required disabled>
+                <input type="text" class="form-control" id="persona" name="persona" placeholder="" value="" required readonly>
         
                 <div class="invalid-feedback">
                     Elija una opción.
@@ -164,7 +164,7 @@
 
             <div class="col-md-8 mb-3">
                 <label for="material">Material</label>
-                <input type="text" class="form-control" id="material" name="material" placeholder="" value="" required disabled>
+                <input type="text" class="form-control" id="material"  placeholder="" value="" required disabled>
         
                 <div class="invalid-feedback">
                     Elija una opción.
@@ -234,7 +234,7 @@
 
             <div class="col-md-8 mb-3">
                 <label for="cantidad">Cantidad</label>
-                <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" value="" maxlength="" required>
+                <input type="number" class="form-control" id="cantidad"  placeholder="" value="" max="" min="1" required>
         
                 <div class="invalid-feedback">
                     Ingrese una cantidad válida.
@@ -245,6 +245,29 @@
                 <button type="button" class="botones btn w-100" name="agregar" id="agregar">Agregar</button>
             </div>
 
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <table class="table mt-3" id="tablaSolicitudes">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Material</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contenidoTablaSolicitudes">
+                        <!-- <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+
+            </div>
         </div>
 
         <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">

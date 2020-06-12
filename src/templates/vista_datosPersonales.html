@@ -1,0 +1,98 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Registrar área{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+{% endblock %}
+
+{% block contenido %}
+<!-- REGISTRO DE AREAS -->
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Datos personales</h3>
+
+    <div class="row ">
+
+        <div class="col-md-12" id="detalles" hidden>
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <h5 class="font-weight-bold">CURP</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="curp">{{ datosPersonales[0] }}</h5></div></div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <h5 class="font-weight-bold">Nombre</h5>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="nombre"></h5></div></div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <h5 class="font-weight-bold">Descripción</h5>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12"> 
+                        <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="descrip"></h5></div></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+
+    </div>
+
+    <div class="row">
+
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/scripts/areas_registro.js') }}"></script>
+
+{% endblock %}

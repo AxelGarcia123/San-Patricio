@@ -1,5 +1,5 @@
 {% extends "menu_responsive.html" %}
-{% block titulo %}Solicitudes{% endblock %}
+{% block titulo %}Préstamos{% endblock %}
 
 {% block css %}
 
@@ -57,15 +57,15 @@
             <div class="col-md-3 border-right border-dark">
         
                 <div class="row justify-content-between pr-4">
-                    <h4>Solicitudes</h4>
+                    <h4>Préstamos</h4>
                     <!-- <button class="btn btn-primary">
                         <span data-feather="user-plus" class="mr-2"></span>
                         Nuevo
                     </button> -->
 
-                    <a href="/solicitudes/solicitar" class="btn btn-primary">
+                    <a href="/prestamos/prestar" class="btn btn-primary">
                         <span data-feather="plus" class="mr-2"></span>
-                        Nueva
+                        Nuevo
                     </a>
                 </div>
                 
@@ -75,25 +75,25 @@
                     <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaSolicitudes">
                         <li class="list-group-item py-2 px-0">
                 
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseSolicitudes" aria-expanded="false" aria-controls="collapseSolicitudes">
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapsePrestamos" aria-expanded="false" aria-controls="collapsePrestamos">
                                 <div>
                                     <span data-feather="chevron-right"></span>
-                                    Todas
+                                    Todos
                                 </div>
 
                                 <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ solicitudes|length }}</span>
+                                    <span class="badge badge-primary badge-pill" id="">{{ prestamos|length }}</span>
                                 </div>  
                             </button>
                             
-                            {% if solicitudes|length > 0 %}
-                                <div class="collapse" id="collapseSolicitudes">
+                            {% if prestamos|length > 0 %}
+                                <div class="collapse" id="collapsePrestamos">
                                     <div class="card card-body border-0">
                                         <ul class="list-group-flush p-0">
-                                            {% for i in solicitudes %}
+                                            {% for i in prestamos %}
                                                 <li class="list-group-item p-0">
                                                     <span data-feather="user"></span>
-                                                    <button class="btn text-secondary p-0 btnMostrarSolicitud" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
+                                                    <button class="btn text-secondary p-0 btnMostrarPrestamo" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
                                                 </li>
                                             {% endfor %}
                                             <!-- <li class="list-group-item p-0">

@@ -1,0 +1,138 @@
+{% extends "menu_responsive.html" %}
+{% block titulo %}Prestar material{% endblock %}
+
+{% block css %}
+
+<style>
+    .form-control, .custom-select {
+        background-color: #ededed;
+    }
+
+    .botones {
+        background-color: #1DE9B6;
+        font-size: medium;
+    }
+</style>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="forma py-3 px-5 mt-3 border border-dark wrapper flex-grow-1">
+
+    <h3 class="mx-auto mb-4">Prestar material</h3>
+
+    <form class="needs-validation"  action="" method="POST">
+        <div class="row ">
+
+            <div class="col-md-8 mb-3">
+                <label for="solicitud">Solicitud</label>
+                <input type="text" class="form-control" id="solicitud" name="solicitud" placeholder="" value="" required readonly>
+        
+                <div class="invalid-feedback">
+                    Elija una opción.
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+            <div class="col-md-4 mb-3 d-flex align-items-end justify-content-end">
+                <button type="button" class="btn btn-primary w-100" name="buscarSolicitud" id="buscarSolicitud" data-toggle="modal" data-target="#buscarSolicitudes">Buscar solicitud</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="buscarSolicitudes" tabindex="-1" role="dialog" aria-labelledby="tituloSolicitudes" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tituloSolicitudes">Solicitudes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <table
+                            id="tablaSolicitudes"
+                            data-locale="es-MX"
+                            data-toggle="table"
+                            data-search="true"
+                            data-single-select="true"
+                            data-click-to-select="true"
+                            data-pagination="true"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-sortable="true">Clave</th>
+                                        <th data-sortable="true">CURP del solicitante</th>
+                                        <th data-sortable="true">Nombre</th>
+                                        <th data-sortable="true">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in solicitudes %}
+                                        <tr id="tr-id-{{ loop.index }}" class="tr-class-{{ loop.index }}">
+                                            <td data-field="state" data-checkbox="true"></td>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[3] }}</td>
+                                            <td>{{ i[2] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="btnSeleccionarSolicitud">Seleccionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 mb-3">
+                <div class="toolbar">
+                    <h5 class="">Material solicitado</h5>
+                </div>
+
+                <table
+                id="tablaSolicitudMateriales"
+                data-toolbar=".toolbar"
+                data-locale="es-MX"
+                data-toggle="table"
+                >
+                    <thead>
+                        <tr>
+                            <th data-sortable="true" data-field="material">Material</th>
+                            <th data-sortable="true" data-field="cantidad">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <!-- <tbody id="tablaActivos">
+                    </tbody> -->
+                </table>
+            </div>
+
+        </div>
+
+        <div class="d-flex align-items-end flex-column mb-3" style="height: 200px;">
+            <div class="mt-auto bd-highlight">
+                <button type="submit" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btAceptar">Siguiente</button>
+                <button type="reset" class="botones btn btn-lg mr-2 rounded-pill px-5" id="_btCancelar">Cancelar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/scripts/materiales_prestar.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
+
+{% endblock %}

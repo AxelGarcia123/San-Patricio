@@ -63,7 +63,7 @@
                         Nuevo
                     </button> -->
 
-                    <a href="/alumnos/registrar" class="btn btn-primary">
+                    <a href="/nominas/generar" class="btn btn-primary">
                         <span data-feather="user-plus" class="mr-2"></span>
                         Generar
                     </a>
@@ -72,28 +72,28 @@
                 <div class="row">
                     <!-- <input type="text">Buscar -->
                 
-                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaEmpleados">
+                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaNominas">
                         <li class="list-group-item py-2 px-0">
                 
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseInscritos" aria-expanded="false" aria-controls="collapseInscritos">
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseNominas" aria-expanded="false" aria-controls="collapseNominas">
                                 <div>
                                     <span data-feather="chevron-right"></span>
-                                    Inscritos
+                                    Todas
                                 </div>
 
                                 <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ inscritos|length }}</span>
+                                    <span class="badge badge-primary badge-pill" id="">{{ nominas|length }}</span>
                                 </div>  
                             </button>
                             
-                            {% if inscritos|length > 0 %}
-                                <div class="collapse" id="collapseInscritos">
+                            {% if nominas|length > 0 %}
+                                <div class="collapse" id="collapseNominas">
                                     <div class="card card-body border-0">
                                         <ul class="list-group-flush p-0">
-                                            {% for i in inscritos %}
+                                            {% for i in nominas %}
                                                 <li class="list-group-item p-0">
                                                     <span data-feather="user"></span>
-                                                    <button class="btn text-secondary p-0 btnMostrar inscrito" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
+                                                    <button class="btn text-secondary p-0 btnMostrarNomina" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
                                                 </li>
                                             {% endfor %}
                                             <!-- <li class="list-group-item p-0">
@@ -105,36 +105,6 @@
                                 </div>
                             {% endif %}
                         
-                        </li>
-
-                        <li class="list-group-item py-2 px-0">
-                
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseNoInscritos" aria-expanded="false" aria-controls="collapseNoInscritos">
-                                <div>
-                                    <span data-feather="chevron-right"></span>
-                                    No inscritos
-                                </div>
-
-                                <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ noInscritos|length }}</span>
-                                </div>  
-                            </button>
-                            
-                            {% if noInscritos|length > 0 %}
-                                <div class="collapse" id="collapseNoInscritos">
-                                    <div class="card card-body border-0">
-                                        <ul class="list-group-flush p-0">
-                                            {% for i in noInscritos %}
-                                                <li class="list-group-item p-0">
-                                                    <span data-feather="user"></span>
-                                                    <button class="btn text-secondary p-0 btnMostrar" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            {% endif %}
-                
                         </li>
 
                     </ul>

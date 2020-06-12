@@ -54,7 +54,35 @@
 
 </div>
 
-<h5 class="mx-auto mb-4">4. Horario</h5>
+<h5 class="mx-auto mb-4">4. Datos de pago</h5>
+
+<div class="row ">
+
+    <div class="col-md-6 mb-3">
+        <label for="monto">Monto</label>
+        <input type="number" class="form-control" id="monto" name="monto" placeholder="" value="" min="1" required>
+
+        <div class="invalid-feedback">
+            Ingrese una cantidad válida.
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="modo">Modo de pago</label>
+        <select class="custom-select d-block w-100" id="modo" name="modo" required>
+            <option value="">Elija...</option>
+            <option value="Hora">Hora</option>
+            <option value="Turno">Turno</option>
+        </select>
+
+        <div class="invalid-feedback">
+            Elija una opción.
+        </div>
+    </div>
+
+</div>
+
+<h5 class="mx-auto mb-4">5. Horario</h5>
 
 <div class="d-block my-3">
     <div class="custom-control custom-radio">

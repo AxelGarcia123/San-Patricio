@@ -90,8 +90,8 @@ o
 - [ ] Mejorar la responsividad de los botones de Guardar y Cancelar en los formularios.
 - [ ] Formatear fechas salidas de MySQL.
 - [ ] Terminar nóminas.
-- [ ] Terminar solicitudes de préstamos y devoluciones.
-- [ ] Crear pantallas de reportes.
+- [X] Terminar solicitudes de préstamos y devoluciones.
+- [X] Crear pantallas de reportes.
 - [X] Crear pantallas de materiales.
 - [X] Crear pantallas de grupos.
 - [X] Crear pantallas de áreas.
@@ -102,3 +102,4 @@ o
 * Se cambió la librería _mysql-connector_ a _mysql-connector-python_, ya que la primera es una versión obsoleta.
 * Se mejoraron las URL's de las páginas para facilitar su acceso.
 * Las ventanas de folios e inscripciones se movieron a la sección de alumnos.
+* Se quitó la importación del script _bootstrap.bundle.min.js_ debido a que ocurría un problema con menús dropdown.

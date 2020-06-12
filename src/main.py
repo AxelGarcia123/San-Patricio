@@ -15,6 +15,7 @@ mydb = mysql.connector.connect(
 )
 
 cur = mydb.cursor()
+curpGlobal = ""
 
 @app.route('/')
 def cargar_principal():
@@ -54,6 +55,7 @@ def cargar_login():
             return redirect(url_for('cargar_login'))
 
         rol = "persona"
+        rolEmpleado = ""
 
         query = "select exists(select u.curp_per from usuario u join empleado e on u.curp_per=e.curp_per where u.cve_usu=" + str(claveUsuario[0]) + ")"
         cur.execute(query)
@@ -62,6 +64,12 @@ def cargar_login():
         if esEmpleado[0]:
             rol = "empleado"
 
+            query = "select concat(puesto, '') from usuario u join empleado e on u.curp_per=e.curp_per where user_usu='" + str(_usuario) + "'"
+            cur.execute(query)
+            resultado = cur.fetchall()[0]
+            rolEmpleado = resultado[0]
+            print(rolEmpleado)
+
         query = "select exists(select u.curp_per from usuario u join alumno a on u.curp_per=a.curp_per where u.cve_usu=" + str(claveUsuario[0]) + ")"
         cur.execute(query)
         esAlumno = cur.fetchall()[0]
@@ -69,9 +77,18 @@ def cargar_login():
         if esAlumno[0]:
             rol = "alumno"
 
+        query = "select curp_per from usuario where user_usu='" + str(_usuario) + "'"
+        cur.execute(query)
+        resultado = cur.fetchall()[0]
+
+        print(resultado[0])
+
+        curpGlobal = str(resultado[0])
+
         session['usuario'] = detalles['username']
         session['rol'] = rol
         session['sesion'] = True
+        session['rolEmpleado'] = rolEmpleado
         return redirect(url_for('cargar_principal'))
     return render_template('Login.html')
 
@@ -89,6 +106,18 @@ def cargar_menu():
 @app.route('/menu-responsive')
 def cargar_menu_responsive():
     return render_template('menu_responsive.html')
+
+# --------------------- datosPersonales --------------------- ## --------------------- v_datosPersonales --------------------- #
+
+@app.route('/datos-personales')
+def cargar_vista_datosPersonales():
+    query = "select * from persona where curp_per='" + str(curpGlobal) + "'"
+    cur.execute(query)
+    datosPersonales = cur.fetchall()
+
+    print(curpGlobal)
+
+    return render_template('vista_datosPersonales.html', datosPersonales = datosPersonales)
 
 # --------------------- AREAS --------------------- ## --------------------- s_AREAS --------------------- #
 
@@ -525,6 +554,13 @@ def cargar_empleados_registro():
         # detalles = request.form
         # print(detalles)
 
+        _monto = detalles['monto']
+        _modo = detalles['modo']
+
+        query = "insert into pagoempleado values(%s, now(), %s, %s, (select max(cve_emp) from empleado))"
+        values = (None, _monto, _modo)
+        cur.execute(query, values)
+
         query = "insert into horario values(null, curdate(), (select max(cve_emp) from empleado))"
         cur.execute(query)
 
@@ -551,8 +587,6 @@ def cargar_empleados_registro():
         mydb.commit()
 
         print("INSERION EXITOSA")
-
-
         return redirect(url_for('cargar_empleados'))
         # pass
 
@@ -893,45 +927,94 @@ def cargar_materiales_resurtir():
 
 @app.route('/solicitudes/')
 def cargar_solicitudes():
-    return render_template('solicitudes.html')
+    query = "select cve_sol, concat(nom_per, ' ', ap_per, ' ', am_per) from solicitud s join persona p on s.curp_per=p.curp_per where cve_sol not in (select cve_pres from prestamo)"
+    cur.execute(query)
+    solicitudes = cur.fetchall()
+
+    return render_template('solicitudes.html', solicitudes = solicitudes)
+
+@app.route('/solicitud', methods=['POST'])
+def solicitud():
+    data = request.form
+
+    query = "select cve_sol, concat(nom_per, ' ', ap_per, ' ', am_per), fecha_sol from solicitud s join persona p on s.curp_per=p.curp_per where cve_sol=" + str(data['clave'])
+    cur.execute(query)
+    resultados = cur.fetchall()
+
+    _solicitud = resultados[0]
+
+    query = "select nombre_mat, cantidad_rensolic from renglonsolicitud rs join material m on rs.cve_mat=m.cve_mat where cve_sol=" + str(data['clave'])
+    cur.execute(query)
+    solicitudes = cur.fetchall()
+
+    solicitudesDict = []
+
+    for solicitud in solicitudes:
+        solicitudDict = {
+            "material": solicitud[0],
+            "cantidad": solicitud[1]
+        }
+        solicitudesDict.append(solicitudDict)
+
+    tupla = {
+        "solicitud": [
+            { "clave": _solicitud[0], "solicitante": _solicitud[1], "fecha": str(_solicitud[2]) }
+        ],
+        "solicitudes": solicitudesDict
+    }
+
+    return tupla
 
 @app.route('/solicitudes/solicitar', methods=['POST','GET'])
 def cargar_materiales_solicitar():
     if request.method == "POST":
-
         detalles = request.form
-        _docente = detalles['docente']
-        _material = detalles['material']
-        _fechapres = detalles['fechapres']
-        _cantidad = detalles['cantidad']
+        _curp = detalles['persona']
+        print(detalles)
 
-        query = "insert into prestamo values (%s, %s, %s, %s)"
+        cantidades = detalles.getlist('cantidadVal')
+        materiales = detalles.getlist('materialVal')
 
-        consulta = "select p.curp_per from persona p join empleado e on p.curp_per = e.curp_per where cve_emp = %s and puesto = 'Docente' group by p.curp_per" %_docente
-        cur.execute(consulta)
-        resultado = cur.fetchall()
+        print(cantidades)
+        print(materiales)
 
-        for registro in resultado:
-            _curp = registro[0]
-
-        values = (None, _fechapres, _curp, _docente)
+        query = "insert into solicitud values(%s, curdate(), %s)"
+        values = (None, _curp)
         cur.execute(query, values)
+
+        for i in range(len(materiales)):
+            query = "insert into renglonsolicitud values(null, %s, %s, (select max(cve_sol) from solicitud))"
+            values = (cantidades[i], materiales[i])
+            cur.execute(query, values)
+
         mydb.commit()
-        
-        query = "insert into renglonprestamo values (%s, %s, %s, %s)"
-        consulta = "select max(cve_pres) from prestamo"
-        cur.execute(consulta)
-        result = cur.fetchall()
-
-        for registro in result:
-            _prestamo = registro[0]
-
-        values = (None, _cantidad, _material, _prestamo)
-        cur.execute(query, values)
-        mydb.commit()
-
         print("INSERCION EXITOSA")
-        pass
+        return redirect(url_for('cargar_solicitudes'))
+
+        # query = "insert into prestamo values (%s, %s, %s, %s)"
+
+        # consulta = "select p.curp_per from persona p join empleado e on p.curp_per = e.curp_per where cve_emp = %s and puesto = 'Docente' group by p.curp_per" %_docente
+        # cur.execute(consulta)
+        # resultado = cur.fetchall()
+
+        # for registro in resultado:
+        #     _curp = registro[0]
+
+        # values = (None, _fechapres, _curp, _docente)
+        # cur.execute(query, values)
+        # mydb.commit()
+        
+        # query = "insert into renglonprestamo values (%s, %s, %s, %s)"
+        # consulta = "select max(cve_pres) from prestamo"
+        # cur.execute(consulta)
+        # result = cur.fetchall()
+
+        # for registro in result:
+        #     _prestamo = registro[0]
+
+        # values = (None, _cantidad, _material, _prestamo)
+        # cur.execute(query, values)
+        # mydb.commit()
 
     # query = "select e.cve_emp, concat(nom_per, ' ', ap_per, ' ', am_per) as nombre from persona p join empleado e where p.curp_per = e.curp_per and puesto='Docente'"
     query = " select p.curp_per, concat(nom_per, ' ', ap_per, ' ', am_per), concat(calle_per, ' ', orient_per, ' ', numero_per), tel_per, concat(puesto, '') from persona p join empleado e on p.curp_per=e.curp_per"
@@ -970,25 +1053,100 @@ def cargar_materiales_solicitar():
 
     return render_template('materiales_solicitar.html', empleados = empleados, alumnos = alumnos, materialesAux = materialesAux)
 
-# --------------------- NOMINAS --------------------- ## --------------------- s_NOMINAS --------------------- #
+# --------------------- PRESTAMOS --------------------- ## --------------------- s_PRESTAMOS --------------------- #
 
-@app.route('/nominas', methods=['GET', 'POST'])
-def cargar_nominas():
+@app.route('/prestamos/')
+def cargar_prestamos():
+    query = "select cve_pres, concat(nom_per, ' ', ap_per, ' ', am_per) from prestamo pr join persona p on pr.curp_per=p.curp_per where cve_pres not in (select cve_devo from devolucion)"
+    cur.execute(query)
+    prestamos = cur.fetchall()
+
+    return render_template('prestamos.html', prestamos = prestamos)
+
+@app.route('/pSolicitud', methods=['POST'])
+def pSolicitud():
+    data = request.form
+
+    query = "select cve_rensolic, cantidad_rensolic, nombre_mat from renglonsolicitud rs join material m on rs.cve_mat=m.cve_mat where cve_sol=" + str(data['clave'])
+    cur.execute(query)
+    solicitudes = cur.fetchall()
+
+    solicitudesDict = []
+
+    for solicitud in solicitudes:
+        solicitudDict = {
+            "clave": solicitud[0],
+            "cantidad": solicitud[1],
+            "material": solicitud[2]
+        }
+        solicitudesDict.append(solicitudDict)
+
+    tupla = {
+        "solicitudes": solicitudesDict
+    }
+
+    return tupla
+
+@app.route('/prestamos/prestar', methods=['GET', 'POST'])
+def cargar_materiales_prestar():
     if request.method == "POST":
         detalles = request.form
-        _fecha = detalles['fecha']
-        _monto = detalles['monto']
-        _modo = detalles['modo']
-        _empleado = detalles['empleado']
+        _solicitud = detalles['solicitud']
 
-        query = "insert into pagoempleado values (%s, %s, %s, %s, %s)"
-        values = (None, _fecha, _monto, _modo, _empleado)
+        query = "select curp_per from solicitud where cve_sol=" + str(_solicitud)
+        cur.execute(query)
+        resultados = cur.fetchall()
+
+        solicitud = resultados[0]
+        curp = solicitud[0]
+
+        query = "select * from renglonsolicitud where cve_sol=" + str(_solicitud)
+        cur.execute(query)
+        materialSolicitado = cur.fetchall()
+
+        # print(materialSolicitado)
+
+        query = "insert into prestamo values(%s, curdate(), %s)"
+        values = (_solicitud, curp)
 
         cur.execute(query, values)
-        mydb.commit()
 
+        for material in materialSolicitado:
+            query = "insert into renglonprestamo values(%s, %s, %s, %s)"
+            values = (None, material[1], material[2], _solicitud)
+            cur.execute(query, values)
+
+        mydb.commit()
         print("INSERCION EXITOSA")
-        pass
+        return redirect(url_for('cargar_prestamos'))
+
+    query = "select cve_sol, concat(fecha_sol, ''), concat(nom_per, ' ', ap_per, ' ', am_per), s.curp_per from solicitud s join persona p on s.curp_per=p.curp_per where cve_sol not in (select cve_pres from prestamo)"
+    cur.execute(query)
+    solicitudes = cur.fetchall()
+
+    return render_template('materiales_prestar.html', solicitudes = solicitudes)
+
+# --------------------- NOMINAS --------------------- ## --------------------- s_NOMINAS --------------------- #
+
+@app.route('/nominas/')
+def cargar_nominas():
+    # if request.method == "POST":
+    #     detalles = request.form
+    #     _fecha = detalles['fecha']
+    #     _monto = detalles['monto']
+    #     _modo = detalles['modo']
+    #     _empleado = detalles['empleado']
+
+    #     query = "insert into pagoempleado values (%s, %s, %s, %s, %s)"
+    #     values = (None, _fecha, _monto, _modo, _empleado)
+
+    #     cur.execute(query, values)
+    #     mydb.commit()
+
+    #     print("INSERCION EXITOSA")
+        # pass
+
+    # query = ""
 
     return render_template('nominas.html')
 
@@ -1016,3 +1174,54 @@ def test():
         mydb.commit()
 
     return render_template('test.html')
+
+# --------------------- REPORTES --------------------- ## --------------------- s_REPORTES --------------------- #
+
+@app.route('/reportes/')
+def cargar_reportes():
+    query = "select cve_repmat, nombre_mat from reportematerial rm join material m on rm.cve_mat=m.cve_mat"
+    cur.execute(query)
+    materiales = cur.fetchall()
+
+    return render_template('reportes.html', materiales = materiales)
+
+@app.route('/reporte', methods=['POST'])
+def reporte():
+    data = request.form
+
+    query = "select rm.*, nombre_mat from reportematerial rm join material m on rm.cve_mat=m.cve_mat where cve_repmat=" + str(data['clave'])
+    cur.execute(query)
+    resultados = cur.fetchall()
+
+    reporte = resultados[0]
+
+    tupla = {
+        "reporte": [
+            { "clave": reporte[0], "fecha": str(reporte[1]), "cantidad": reporte[2], "causa": reporte[3], "material": reporte[5] }
+        ]
+    }
+
+    return tupla
+
+@app.route('/reportes/registrar', methods=['GET', 'POST'])
+def cargar_reportes_registrar():
+    if request.method == "POST":
+        detalles = request.form
+        _fecha = detalles['fecha']
+        _cantidad = detalles['cantidad']
+        _causa = detalles['causa']
+        _material = detalles['material']
+
+        query = "insert into reportematerial values(%s, %s, %s, %s, %s)"
+        values = (None, _fecha, _cantidad, _causa, _material)
+        cur.execute(query, values)
+        mydb.commit()
+        print("INSERCION EXITOSA")
+        return redirect(url_for('cargar_reportes'))
+
+    # query = "select * from material m join actividad a on m.cve_act=a.cve_act"
+    query = "select m.*, a.nom_act from material m join actividad a on m.cve_act=a.cve_act"
+    cur.execute(query)
+    materiales = cur.fetchall()
+
+    return render_template('reportes_registrar.html', materiales = materiales)

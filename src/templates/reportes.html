@@ -1,5 +1,5 @@
 {% extends "menu_responsive.html" %}
-{% block titulo %}Solicitudes{% endblock %}
+{% block titulo %}Reportes de material{% endblock %}
 
 {% block css %}
 
@@ -21,10 +21,6 @@
         background-color: #1DE9B6;
         color: white;
     }
-
-    .toast {
-        z-index: 10;
-    }
 </style>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-table/bootstrap-table.min.css') }}">
@@ -32,21 +28,6 @@
 {% endblock %}
 
 {% block contenido %}
-
-<!-- TOAST -->
-<!-- <div class="toast" id="toastFolio" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; bottom: 1rem; left: 1rem;" data-delay="5000">
-    <div class="toast-header">
-        <strong class="mr-auto">Folio</strong>
-        <small>Hace un momento</small>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="toast-body">
-        El folio se ha generado con éxito.
-    </div>
-</div> -->
-<!-- - TOAST - -->
 
 <div class="wrapper flex-grow-1"> 
 
@@ -57,43 +38,43 @@
             <div class="col-md-3 border-right border-dark">
         
                 <div class="row justify-content-between pr-4">
-                    <h4>Solicitudes</h4>
+                    <h4>Reportes</h4>
                     <!-- <button class="btn btn-primary">
                         <span data-feather="user-plus" class="mr-2"></span>
                         Nuevo
                     </button> -->
 
-                    <a href="/solicitudes/solicitar" class="btn btn-primary">
-                        <span data-feather="plus" class="mr-2"></span>
-                        Nueva
+                    <a href="/reportes/registrar" class="btn btn-primary">
+                        <span data-feather="user-plus" class="mr-2"></span>
+                        Nuevo
                     </a>
                 </div>
                 
                 <div class="row">
                     <!-- <input type="text">Buscar -->
                 
-                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaSolicitudes">
+                    <ul class="list-group-flush p-0 w-100 pr-5 pt-3" id="listaMateriales">
                         <li class="list-group-item py-2 px-0">
                 
-                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseSolicitudes" aria-expanded="false" aria-controls="collapseSolicitudes">
+                            <button class="btn text-primary p-0 w-100 d-flex justify-content-between" type="button" id="boton" data-toggle="collapse" data-target="#collapseMateriales" aria-expanded="false" aria-controls="collapseMateriales">
                                 <div>
                                     <span data-feather="chevron-right"></span>
-                                    Todas
+                                    Todos
                                 </div>
 
                                 <div>
-                                    <span class="badge badge-primary badge-pill" id="">{{ solicitudes|length }}</span>
+                                    <span class="badge badge-primary badge-pill" id="">{{ materiales|length }}</span>
                                 </div>  
                             </button>
                             
-                            {% if solicitudes|length > 0 %}
-                                <div class="collapse" id="collapseSolicitudes">
+                            {% if materiales|length > 0 %}
+                                <div class="collapse" id="collapseMateriales">
                                     <div class="card card-body border-0">
                                         <ul class="list-group-flush p-0">
-                                            {% for i in solicitudes %}
-                                                <li class="list-group-item p-0">
-                                                    <span data-feather="user"></span>
-                                                    <button class="btn text-secondary p-0 btnMostrarSolicitud" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
+                                            {% for i in materiales %}
+                                                <li class="list-group-item px-2">
+                                                    <span data-feather="pen-tool"></span>
+                                                    <button class="btn text-secondary p-0 btnMostrarReporte" type="button" value="{{ i[0] }}">{{ i[1] }}</button>
                                                 </li>
                                             {% endfor %}
                                             <!-- <li class="list-group-item p-0">
@@ -104,7 +85,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        
+                
                         </li>
 
                     </ul>
@@ -119,8 +100,7 @@
                 <div class="row border-bottom border-dark p-3">
                     <div class="col-md-12 d-flex justify-content-around">
                         <button class="btn btnSeccion" value="detalles">Detalles</button>
-                        <!-- <button class="btn btnSeccion" value="datosAcademicos" id="btnDatosAcademicos" hidden>Datos académicos</button>
-                        <button class="btn btnSeccion" value="datosInscripcion">Inscripción</button> -->
+                        <!-- <button class="btn btnSeccion" value="grupos">Grupos</button> -->
                         <!-- <button class="btn btnSeccion" value="datosActividades" id="_datosActividades" hidden>Actividades</button>
                         <button class="btn btnSeccion" value="datosGrupos" id="_datosGrupos" hidden>Grupos</button> -->
                         <!-- <button class="btn btnSeccion">Horarios</button> -->
@@ -128,7 +108,7 @@
                 </div>
 
                 <div class="row mt-4">
-                    
+
                     <!-- SECCION DE DETALLES -->
                     <div class="col-md-12" id="detalles" hidden>
 
@@ -154,28 +134,12 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Solicitante</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Fecha</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="solicitante"></h5></div></div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Fecha de solicitud</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-12"> 
                                     <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="fecha"></h5></div></div>
                                 </div>
                             </div>
@@ -186,31 +150,47 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 d-flex justify-content-between">
-                                            <h5 class="font-weight-bold">Solicita</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                            <h5 class="font-weight-bold">Material</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12"> 
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="material"></h5></div></div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Cantidad</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12"> 
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="cantidad"></h5></div></div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <h5 class="font-weight-bold">Causa</h5><button class="btnEditar btn rounded-pill font-weight-bold px-3" id="">Editar</button>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="solicitudes"></h5></div></div>
+                                    <div class="row pt-2"><div class="col-md-12"><h5 class="text-muted" id="causa"></h5></div></div>
                                 </div>
                             </div>
-
-                            <table
-                            id="tablaSolicitud"
-                            data-toolbar=".toolbar"
-                            data-locale="es-MX"
-                            data-toggle="table"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th data-sortable="true" data-field="material">Material</th>
-                                        <th data-sortable="true" data-field="cantidad">Cantidad</th>
-                                    </tr>
-                                </thead>
-                                <!-- <tbody id="tablaActivos">
-                                </tbody> -->
-                            </table>
 
                             <hr>
 
@@ -229,7 +209,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/feather.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/scripts/solicitudes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts/reportes.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table.min.js') }}"></script> 
 <script src="{{ url_for('static', filename='js/bootstrap-table/bootstrap-table-es-MX.min.js') }}"></script> 
 
